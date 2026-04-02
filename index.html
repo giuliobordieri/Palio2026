@@ -214,8 +214,9 @@
 <section id="iscrizione">
     <h2>📝 Richiesta di partecipazione ai giochi</h2>
     <form id="form-palio" action="https://formsubmit.co/giuliobordieri443@gmail.com" method="POST">
-        
-        <input type="hidden" name="_next" value="https://giuliobordieri.github.io/Palio2026/grazie.html">
+    
+        <input type="hidden" name="_next" id="hidden_next" value="https://giuliobordieri.github.io/Palio2026/grazie.html">
+    
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_subject" value="RICHIESTA GIOCHI PALIO 2026!">
 
@@ -249,14 +250,19 @@
 </section>
 
 <script>
-    // 1. LOGICA CAMBIO EMAIL DINAMICO
+    // 1. LOGICA CAMBIO EMAIL E REDIRECT
     const form = document.getElementById('form-palio');
     const select = document.getElementById('select-contrada');
 
-    form.addEventListener('submit', function() {
+    form.addEventListener('submit', function(e) {
         const selectedOption = select.options[select.selectedIndex];
         const emailDestinatario = selectedOption.getAttribute('data-email');
+        
+        // Imposta l'azione sull'email corretta
         form.action = "https://formsubmit.co/" + emailDestinatario;
+        
+        // Forza il valore del redirect un istante prima dell'invio
+        document.getElementById('hidden_next').value = "https://giuliobordieri.github.io/Palio2026/grazie.html";
     });
 
     // 2. LOGICA COUNTDOWN
@@ -271,13 +277,10 @@
         document.getElementById("timer").innerHTML = `Mancano: ${d}g ${h}h ${m}m ${s}s`;
     }, 1000);
 
-    // 3. EVIDENZIAZIONE GIORNO CORRENTE
+    // 3. EVIDENZIAZIONE GIORNO
     window.onload = function() {
         const now = new Date();
-        const offset = now.getTimezoneOffset();
-        const localNow = new Date(now.getTime() - (offset*60*1000));
-        const todayStr = localNow.toISOString().split('T')[0];
-        
+        const todayStr = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
         const rows = document.querySelectorAll('#tabella-programma tbody tr');
         rows.forEach(row => {
             if (row.getAttribute('data-date') === todayStr) {
