@@ -297,7 +297,7 @@
     <form id="form-palio" action="https://formsubmit.co/giuliobordieri443@gmail.com" method="POST">
         
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="Nuova Iscrizione Palio 2026!">
+        <input type="hidden" name="_subject" value="RICHIESTA GIOCHI PALIO 2026!">
 
         <label>Nome e Cognome</label>
         <input type="text" name="Nominativo" required>
@@ -317,14 +317,14 @@
         </select>
 
         <label>A quali giochi vorresti partecipare?</label>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
-            <label><input type="checkbox" name="Gioco" value="Corsa Sacchi"> Corsa nei Sacchi</label>
-            <label><input type="checkbox" name="Gioco" value="Tiro Fune"> Tiro alla Fune</label>
-            <label><input type="checkbox" name="Gioco" value="Staffetta"> Staffetta</label>
-            <label><input type="checkbox" name="Gioco" value="Dama"> Torneo di Dama</label>
-        </div>
+	<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
+	    <label><input type="checkbox" name="Giochi[]" value="Corsa Sacchi"> Corsa nei Sacchi</label>
+	    <label><input type="checkbox" name="Giochi[]" value="Tiro Fune"> Tiro alla Fune</label>
+	    <label><input type="checkbox" name="Giochi[]" value="Staffetta"> Staffetta</label>
+	    <label><input type="checkbox" name="Giochi[]" value="Dama"> Torneo di Dama</label>
+	</div>
 
-        <button type="submit">INVIA ISCRIZIONE</button>
+        <button type="submit">INVIA RICHIESTA</button>
     </form>
 </section>
 
