@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grazie - Palio 2026</title>
+    <title>Ricevuta Ordine - Palio 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -20,7 +20,7 @@
                         url('Palio2026.jpg') no-repeat center center fixed;
             background-size: cover;
             color: var(--white);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,7 +29,7 @@
 
         .container {
             background: rgba(0, 0, 0, 0.85);
-            padding: 50px;
+            padding: 40px;
             border-radius: 20px;
             border: 2px solid var(--gold);
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
@@ -40,15 +40,66 @@
         h1 {
             font-family: 'Cinzel', serif;
             color: var(--gold);
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
             text-shadow: 2px 2px 5px #000;
         }
 
         p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Sezione Input per Ricevuta */
+        .receipt-fields {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px dashed var(--gold);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: var(--gold);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--gold);
+            color: white;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .total-box {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 5px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
         }
 
         .btn {
@@ -56,11 +107,14 @@
             background: var(--gold);
             color: var(--dark);
             text-decoration: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             font-weight: bold;
             border-radius: 5px;
             transition: 0.3s;
             text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .btn:hover {
@@ -68,24 +122,108 @@
             transform: scale(1.05);
         }
 
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
         .icon {
-            font-size: 4rem;
+            font-size: 3rem;
             margin-bottom: 10px;
+        }
+
+        /* STILE PER LA STAMPA */
+        @media print {
+            .actions, .btn, label, input[type="text"], input[type="number"] {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                height: auto;
+            }
+            .container {
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+                margin: 0;
+                width: 100%;
+            }
+            h1, p, .total-box {
+                color: black !important;
+                text-shadow: none !important;
+            }
+            .receipt-fields {
+                border: 1px solid #000;
+                background: none;
+            }
+            /* Mostra i valori inseriti come testo durante la stampa */
+            .print-only {
+                display: block !important;
+                font-weight: bold;
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+        }
+
+        .print-only {
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="icon">🏆</div>
-        <h1>Grazie per la tua richiesta!</h1>
-        <p>
-            Il tuo messaggio è stato consegnato al tuo capitano!<br>
-            Verrai contattato/a al più presto per confermare la tua partecipazione.
-        </p>
-        <p style="font-style: italic; color: var(--gold);">Che vinca il migliore!</p>
-        <a href="index.html" class="btn">Torna alla Home</a>
+        <div class="icon">👕</div>
+        <h1>Ordine Registrato!</h1>
+        <p>Grazie per la tua prenotazione. Inserisci i tuoi dati qui sotto per generare la ricevuta corretta da stampare.</p>
+
+        <div class="receipt-fields">
+            <div class="input-group">
+                <label>Nome e Cognome</label>
+                <input type="text" id="nome" placeholder="Es: Mario Rossi" oninput="updatePrint()">
+                <div id="print-nome" class="print-only"></div>
+            </div>
+
+            <div class="input-group">
+                <label>Numero Magliette</label>
+                <input type="number" id="quantita" value="1" min="1" oninput="calcolaTotale()">
+                <div id="print-quantita" class="print-only"></div>
+            </div>
+
+            <div class="total-box">
+                Totale da pagare: <span id="prezzo-finale">7</span>€
+            </div>
+        </div>
+
+        <p style="font-size: 0.9rem;">Il costo è di 7€ per ogni maglietta prenotata.</p>
+        
+        <div class="actions">
+            <button onclick="window.print()" class="btn">🖨️ Stampa Ricevuta</button>
+            <a href="index.html" class="btn btn-outline">Torna alla Home</a>
+        </div>
+        
+        <p style="font-style: italic; color: var(--gold); margin-top: 20px;">Ci vediamo in piazza!</p>
     </div>
+
+    <script>
+        function calcolaTotale() {
+            const qta = document.getElementById('quantita').value;
+            const totale = qta * 7;
+            document.getElementById('prezzo-finale').innerText = totale;
+            updatePrint();
+        }
+
+        function updatePrint() {
+            const nome = document.getElementById('nome').value;
+            const qta = document.getElementById('quantita').value;
+            
+            document.getElementById('print-nome').innerText = "Cliente: " + nome;
+            document.getElementById('print-quantita').innerText = "Magliette prenotate: " + qta;
+        }
+    </script>
 
 </body>
 </html>
