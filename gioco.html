@@ -7,161 +7,180 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #d4af37; --dirt: #8b5a2b; }
-        body { background: #1a1a1a; color: white; font-family: 'Open Sans', sans-serif; text-align: center; padding: 10px; margin: 0; overflow-x: hidden; }
-        h1 { font-family: 'Cinzel', serif; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        body { background: #1a1a1a; color: white; font-family: 'Open Sans', sans-serif; text-align: center; padding: 10px; margin: 0; }
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 10px; }
         
-        .container { max-width: 850px; margin: 0 auto; background: #2c1e12; padding: 20px; border-radius: 15px; border: 3px solid var(--gold); position: relative; }
+        .container { max-width: 850px; margin: 0 auto; background: #2c1e12; padding: 20px; border-radius: 15px; border: 3px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.7); }
         
-        /* TRIBUNE COLORATE */
-        .crowd-bg {
-            display: flex; justify-content: space-around; align-items: flex-end;
-            height: 40px; margin-bottom: -5px; opacity: 0.8;
-        }
-        .tribuna { width: 23%; height: 100%; border-radius: 10px 10px 0 0; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold; }
-        .t-rossi { background: #ff4d4d; color: white; }
-        .t-azzurri { background: #4d94ff; color: white; }
-        .t-verdi { background: #4dff4d; color: black; }
-        .t-gialli { background: #ffff4d; color: black; }
+        #wallet-display { font-size: 2.2rem; color: #4dff4d; font-weight: bold; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
+        
+        .betting-panel { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 20px; }
+        select, input, button { padding: 12px; font-size: 1rem; border-radius: 5px; border: none; margin: 5px; background: #fff; color: #000; }
+        
+        #start-race-btn { background: var(--gold); color: black; font-weight: bold; cursor: pointer; width: 220px; transition: 0.3s; text-transform: uppercase; }
+        #start-race-btn:hover { background: #fff; transform: scale(1.05); }
+        #start-race-btn:disabled { background: #555; cursor: not-allowed; transform: none; }
 
+        /* Pista */
         #race-track { 
-            position: relative; background: var(--dirt); border: 6px solid #3e2723; border-radius: 0 0 8px 8px; 
-            overflow: hidden; display: none; box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+            position: relative; 
+            background: var(--dirt); 
+            border: 6px solid #3e2723; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            display: none; 
+            margin-top: 20px;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
         }
         
-        .finish-line { position: absolute; right: 80px; top: 0; bottom: 0; width: 20px; background: repeating-linear-gradient(0deg, #fff, #fff 10px, #000 10px, #000 20px); z-index: 10; border-left: 2px solid gold; }
-        .lane { position: relative; height: 70px; border-bottom: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; }
-        .horse-sprite { position: absolute; left: 10px; font-size: 40px; z-index: 5; transition: left 0.05s linear; display: flex; flex-direction: column; align-items: center; }
-        .horse-name { font-size: 10px; font-weight: bold; background: rgba(0,0,0,0.8); padding: 2px 4px; border-radius: 3px; margin-top: -5px; }
-
-        #countdown-overlay {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 8rem; font-family: 'Cinzel'; color: var(--gold); z-index: 100; display: none; text-shadow: 0 0 20px black;
+        .finish-line { 
+            position: absolute; 
+            right: 80px; top: 0; bottom: 0; width: 20px; 
+            background: repeating-linear-gradient(0deg, #fff, #fff 10px, #000 10px, #000 20px); 
+            z-index: 10; border-left: 2px solid gold;
         }
 
-        button { padding: 12px 25px; font-size: 1rem; border-radius: 8px; border: none; background: var(--gold); font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.05); background: white; }
-        button:disabled { background: #555; cursor: not-allowed; }
-        .btn-home { display: inline-block; margin-top: 20px; color: var(--gold); text-decoration: none; border: 1px solid var(--gold); padding: 10px 20px; border-radius: 5px; }
+        .lane { 
+            position: relative; height: 75px; 
+            border-bottom: 2px solid rgba(255,255,255,0.1); 
+            display: flex; align-items: center; 
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .horse-sprite { 
+            position: absolute; left: 10px; font-size: 45px; z-index: 5;
+            filter: drop-shadow(3px 5px 2px rgba(0,0,0,0.6));
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .horse-name { font-size: 11px; font-weight: bold; text-transform: uppercase; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; margin-top: -8px; border: 1px solid rgba(255,255,255,0.2); }
+
+        .btn-home { display: inline-block; margin-top: 25px; color: var(--gold); text-decoration: none; font-weight: bold; border: 1px solid var(--gold); padding: 12px 25px; border-radius: 8px; transition: 0.3s; }
+        .btn-home:hover { background: var(--gold); color: black; }
     </style>
 </head>
 <body>
 
-    <h1>🏇 IL TORNEO DEI DESTRIERI</h1>
+    <h1>🏇 GRAN TORNEO DEI DESTRIERI</h1>
     
     <div class="container">
-        <div id="countdown-overlay">3</div>
-        <div id="wallet-display" style="font-size: 2rem; color: #4dff4d; margin-bottom: 15px;">💰 <span id="credits">5</span> MONETE</div>
+        <div id="wallet-display">💰 <span id="credits">5</span> MONETE</div>
 
-        <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-            <select id="horse-select" style="padding:10px; border-radius:5px;"></select>
-            <input type="number" id="bet-amount" min="1" max="5" value="1" style="padding:10px; border-radius:5px; width:60px;">
-            <button id="start-race-btn" onclick="preRace()">PUNTA E CORRI</button>
+        <div class="betting-panel">
+            <p style="margin-top:0">Analizza l'energia e punta (Max 5):</p>
+            <select id="horse-select"></select>
+            <input type="number" id="bet-amount" min="1" max="5" value="1">
+            <button id="start-race-btn" onclick="startRace()">INIZIA LA CORSA</button>
         </div>
 
-        <div id="race-container" style="display:none;">
-            <div class="crowd-bg">
-                <div class="tribuna t-rossi">ROSSI</div>
-                <div class="tribuna t-azzurri">AZZURRI</div>
-                <div class="tribuna t-verdi">VERDI</div>
-                <div class="tribuna t-gialli">GIALLI</div>
-            </div>
-            <div id="race-track">
-                <div class="finish-line"></div>
-                <div id="lanes-container"></div>
-            </div>
+        <div id="race-track">
+            <div class="finish-line"></div>
+            <div id="lanes-container"></div>
         </div>
 
-        <div id="race-result" style="margin-top: 20px; font-size: 1.5rem; font-family: 'Cinzel'; min-height: 60px;"></div>
+        <div id="race-result" style="margin-top: 20px; font-size: 1.6rem; font-family: 'Cinzel'; min-height: 80px; line-height: 1.2;"></div>
     </div>
 
-    <a href="index.html" class="btn-home">⬅️ TORNA ALLA HOME</a>
+    <a href="index.html" class="btn-home">⬅️ RITORNA ALLA HOME</a>
 
     <script>
         let totalCredits = 5;
         let horses = [
-            { id: 1, name: "Furia Rossa", color: "#ff4d4d" },
-            { id: 2, name: "Levriero Blu", color: "#4d94ff" },
-            { id: 3, name: "Smeraldo", color: "#4dff4d" },
-            { id: 4, name: "Fulmine Giallo", color: "#ffff4d" }
+            { id: 1, name: "Furia Rossa", color: "#ff4d4d", energy: 0 },
+            { id: 2, name: "Levriero Blu", color: "#4d94ff", energy: 0 },
+            { id: 3, name: "Smeraldo", color: "#4dff4d", energy: 0 },
+            { id: 4, name: "Fulmine Giallo", color: "#ffff4d", energy: 0 }
         ];
+
+        // Inizializza il gioco
+        refreshEnergies();
 
         function refreshEnergies() {
             const select = document.getElementById('horse-select');
             select.innerHTML = "";
+            
             horses.forEach(h => {
-                h.energy = Math.floor(Math.random() * 66) + 30;
+                // Energia casuale tra 30 e 95 per ogni partita
+                h.energy = Math.floor(Math.random() * (95 - 30 + 1)) + 30;
+                
                 let opt = document.createElement('option');
                 opt.value = h.id;
-                opt.innerHTML = `${h.energy > 80 ? '🔥' : '🐎'} ${h.name} (${h.energy}%)`;
+                // Emoji per indicare visivamente la forza
+                let mood = h.energy > 80 ? "🔥" : h.energy > 50 ? "⚡" : "💤";
+                opt.innerHTML = `${mood} ${h.name} (E: ${h.energy}%)`;
                 select.appendChild(opt);
             });
         }
-        refreshEnergies();
 
-        // Funzione per parlare (Countdown sonoro)
-        function speak(text) {
-            const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = 'it-IT';
-            msg.rate = 1.2;
-            window.speechSynthesis.speak(msg);
-        }
+        function startRace() {
+            const betAmount = parseInt(document.getElementById('bet-amount').value);
+            const selectedHorseId = parseInt(document.getElementById('horse-select').value);
+            const track = document.getElementById('race-track');
+            const resultDiv = document.getElementById('race-result');
+            const btn = document.getElementById('start-race-btn');
 
-        function preRace() {
-            const bet = parseInt(document.getElementById('bet-amount').value);
-            if (bet > totalCredits || bet < 1 || bet > 5) return alert("Puntata non valida!");
-            
-            document.getElementById('start-race-btn').disabled = true;
-            document.getElementById('race-container').style.display = 'block';
-            document.getElementById('race-result').innerHTML = "";
-            
-            let count = 3;
-            const overlay = document.getElementById('countdown-overlay');
-            overlay.style.display = 'block';
-            
-            const timer = setInterval(() => {
-                overlay.innerHTML = count > 0 ? count : "VIA!";
-                speak(count > 0 ? count : "VIA!");
-                if (count < 0) {
-                    clearInterval(timer);
-                    overlay.style.display = 'none';
-                    startRace(bet);
-                }
-                count--;
-            }, 1000);
-        }
+            if (betAmount > totalCredits || betAmount < 1 || betAmount > 5) {
+                alert("Puntata non valida!");
+                return;
+            }
 
-        function startRace(betAmount) {
             totalCredits -= betAmount;
             document.getElementById('credits').innerHTML = totalCredits;
-            const selectedId = parseInt(document.getElementById('horse-select').value);
+            resultDiv.innerHTML = "I cancelli si spalancano... PARTITI!";
+            resultDiv.style.color = "white";
+            track.style.display = 'block';
+            btn.disabled = true;
+
             const container = document.getElementById('lanes-container');
             container.innerHTML = "";
-            
-            const horseStates = horses.map(h => ({ ...h, pos: 10 }));
+            const horseStates = horses.map(h => ({ ...h, pos: 15 }));
+
             horseStates.forEach(h => {
                 const lane = document.createElement('div');
                 lane.className = "lane";
-                lane.innerHTML = `<div id="h-${h.id}" class="horse-sprite">🏇<span class="horse-name" style="color:${h.color}">${h.name}</span></div>`;
+                lane.innerHTML = `
+                    <div id="h-${h.id}" class="horse-sprite">
+                        🏇
+                        <span class="horse-name" style="color:${h.color}; border-color:${h.color}">${h.name}</span>
+                    </div>
+                `;
                 container.appendChild(lane);
             });
 
             const raceInterval = setInterval(() => {
-                let winner = null;
+                let winnerFound = null;
+
                 horseStates.forEach(h => {
-                    h.pos += (Math.random() * (h.energy / 20)) + (Math.random() * 5);
-                    document.getElementById(`h-${h.id}`).style.left = h.pos + "px";
-                    if (h.pos >= document.getElementById('race-track').clientWidth - 90 && !winner) winner = h;
+                    // L'energia influenza la velocità base
+                    let boost = h.energy / 22; 
+                    h.pos += (Math.random() * boost) + (Math.random() * 4.5);
+                    
+                    const el = document.getElementById(`h-${h.id}`);
+                    el.style.left = h.pos + "px";
+
+                    if (h.pos >= track.clientWidth - 95) {
+                        if (!winnerFound) winnerFound = h;
+                    }
                 });
 
-                if (winner) {
+                if (winnerFound) {
                     clearInterval(raceInterval);
-                    const won = winner.id === selectedId;
-                    if(won) totalCredits += (betAmount * 2);
+                    const won = winnerFound.id === selectedHorseId;
+                    
+                    if(won) {
+                        totalCredits += (betAmount * 2);
+                        resultDiv.innerHTML = `<span style="color:var(--gold)">VITTORIA EPICA!</span><br>${winnerFound.name} ti ha fatto raddoppiare!`;
+                    } else {
+                        resultDiv.innerHTML = `<span style="color:#ff4d4d">SCONFITTA!</span><br>${winnerFound.name} ha vinto la gara.`;
+                    }
+                    
                     document.getElementById('credits').innerHTML = totalCredits;
-                    document.getElementById('race-result').innerHTML = won ? "🏆 HAI VINTO!" : `💀 HA VINTO ${winner.name}`;
-                    document.getElementById('race-result').style.color = won ? "#4dff4d" : "#ff4d4d";
-                    if(totalCredits > 0) {
-                        document.getElementById('start-race-btn').disabled = false;
+                    
+                    if(totalCredits <= 0) {
+                        resultDiv.innerHTML += "<br><small style='color:#777'>MONETE ESAURITE. RICARICA LA PAGINA!</small>";
+                    } else {
+                        btn.disabled = false;
+                        // Rimescola le energie per la prossima gara
                         refreshEnergies();
                     }
                 }
