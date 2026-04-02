@@ -213,56 +213,58 @@
 
 <section id="iscrizione">
     <h2>📝 Richiesta di partecipazione ai giochi</h2>
-    <form id="form-palio" action="https://formsubmit.co/giuliobordieri443@gmail.com" method="POST">
     
-        <input type="hidden" name="_next" id="hidden_next" value="https://giuliobordieri.github.io/Palio2026/grazie.html">
-    
+    <form action="https://formsubmit.co/giuliobordieri443@gmail.com" method="POST">
+        <input type="hidden" name="_next" value="https://giuliobordieri.github.io/Palio2026/grazie.html">
         <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="RICHIESTA GIOCHI PALIO 2026!">
+        <input type="hidden" name="_subject" value="NUOVA ISCRIZIONE PALIO 2026">
 
         <label>Nome e Cognome</label>
-        <input type="text" name="Nominativo" required>
+        <input type="text" name="Nominativo" placeholder="Inserisci il tuo nome e cognome" required>
 
-        <label>Anno di Nascita</label>
-        <input type="number" name="Anno" min="1930" max="2026" required>
+        <label>Cellulare</label>
+        <input type="tel" name="Telefono" placeholder="Il tuo numero per chiamate e WhatsApp" required>
 
-        <label>Cellulare (WhatsApp)</label>
-        <input type="tel" name="Telefono" required>
-
-        <label>Scegli la tua contrada:</label>
-        <select id="select-contrada" name="Contrada" required>
-            <option value="ROSSI" data-email="giulio.bordieri@unitn.it">ROSSI</option>
-            <option value="AZZURRI" data-email="giuliobordieri443@gmail.com">AZZURRI</option>
-            <option value="VERDI" data-email="mail_capitano_verdi@gmail.com">VERDI</option>
-            <option value="GIALLI" data-email="mail_capitano_gialli@gmail.com">GIALLI</option>
+        <label>Contrada di appartenenza</label>
+        <select name="Contrada" required>
+            <option value="" disabled selected>Seleziona la tua Contrada</option>
+            <option value="ROSSI">🔴 ROSSI</option>
+            <option value="AZZURRI">🔵 AZZURRI</option>
+            <option value="VERDI">🟢 VERDI</option>
+            <option value="GIALLI">🟡 GIALLI</option>
         </select>
-
-        <label>Giochi di interesse:</label>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
-            <label><input type="checkbox" name="Giochi[]" value="Corsa Sacchi"> Corsa nei Sacchi</label>
-            <label><input type="checkbox" name="Giochi[]" value="Tiro Fune"> Tiro alla Fune</label>
-            <label><input type="checkbox" name="Giochi[]" value="Staffetta"> Staffetta</label>
-            <label><input type="checkbox" name="Giochi[]" value="Dama"> Torneo di Dama</label>
-        </div>
 
         <button type="submit">INVIA RICHIESTA</button>
     </form>
+
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px dashed var(--gold); text-align: center;">
+        <p style="font-style: italic; color: #aaa; margin-bottom: 20px;">
+            Oppure contatta direttamente il tuo Capitano di Contrada:
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid #ff4d4d;">
+                <strong style="color: #ff4d4d;">Capitano ROSSI</strong><br>
+                📞 000 0000000
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid #4d94ff;">
+                <strong style="color: #4d94ff;">Capitano AZZURRI</strong><br>
+                📞 000 0000000
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid #4dff4d;">
+                <strong style="color: #4dff4d;">Capitano VERDI</strong><br>
+                📞 000 0000000
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid #ffff4d;">
+                <strong style="color: #ffff4d;">Capitano GIALLI</strong><br>
+                📞 000 0000000
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>
-    // 1. LOGICA CAMBIO EMAIL E REDIRECT
-    const form = document.getElementById('form-palio');
-    const select = document.getElementById('select-contrada');
-
-    form.addEventListener('submit', function(e) {
-        const selectedOption = select.options[select.selectedIndex];
-        const emailDestinatario = selectedOption.getAttribute('data-email');
-        
-        // Imposta l'azione sull'email corretta
-        form.action = "https://formsubmit.co/" + emailDestinatario;
-    });
-
-    // 2. LOGICA COUNTDOWN
+    // LOGICA COUNTDOWN
     const targetDate = new Date("May 28, 2026 18:00:00").getTime();
     setInterval(() => {
         const now = new Date().getTime();
@@ -274,7 +276,7 @@
         document.getElementById("timer").innerHTML = `Mancano: ${d}g ${h}h ${m}m ${s}s`;
     }, 1000);
 
-    // 3. EVIDENZIAZIONE GIORNO
+    // EVIDENZIAZIONE GIORNO
     window.onload = function() {
         const now = new Date();
         const todayStr = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
