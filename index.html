@@ -160,12 +160,10 @@
         <table>
             <thead>
                 <tr>
-                    <th>Contrada</th>
-                    <th>Corsa Sacchi</th>
-                    <th>Tiro Fune</th>
-                    <th>Staffetta</th>
-                    <th>Dama</th>
-                    <th>Carte</th>
+                    <th>Gioco 1</th>
+                    <th>Gioco 2</th>
+                    <th>Gioco 3</th>
+                    <th>Gioco 4</th>
                     <th style="color: var(--white); background-color: var(--gold);">PUNTI TOTALI</th>
                 </tr>
             </thead>
@@ -220,10 +218,10 @@
         <input type="hidden" name="_subject" value="NUOVA ISCRIZIONE PALIO 2026">
 
         <label>Nome e Cognome</label>
-        <input type="text" name="Nominativo" placeholder="Inserisci il tuo nome e cognome" required>
+        <input type="text" name="Nominativo" placeholder="Inserisci il tuo nome" required>
 
         <label>Cellulare</label>
-        <input type="tel" name="Telefono" placeholder="Il tuo numero per chiamate e WhatsApp" required>
+        <input type="tel" name="Telefono" placeholder="Il tuo numero WhatsApp" required>
 
         <label>Contrada di appartenenza</label>
         <select name="Contrada" required>
@@ -234,7 +232,16 @@
             <option value="GIALLI">🟡 GIALLI</option>
         </select>
 
-        <button type="submit">INVIA RICHIESTA</button>
+        <label style="margin-top: 10px; display: block;">A quali giochi vuoi partecipare?</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: left;">
+            <label style="font-size: 0.9rem;"><input type="checkbox" name="Giochi[]" value="Gioco 1"> Gioco 1</label>
+            <label style="font-size: 0.9rem;"><input type="checkbox" name="Giochi[]" value="Gioco 2"> Gioco 2</label>
+            <label style="font-size: 0.9rem;"><input type="checkbox" name="Giochi[]" value="Gioco 3"> Gioco 3</label>
+            <label style="font-size: 0.9rem;"><input type="checkbox" name="Giochi[]" value="Gioco 4"> Gioco 4</label>
+            <label style="font-size: 0.9rem; grid-column: span 2;"><input type="checkbox" name="Giochi[]" value="Gioco 5"> Gioco 5</label>
+        </div>
+
+        <button type="submit" style="margin-top: 20px;">INVIA ISCRIZIONE</button>
     </form>
 
     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px dashed var(--gold); text-align: center;">
