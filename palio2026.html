@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PALIO DELLE CONTRADE 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+	    :root {
+		--gold: #d4af37;
+		--dark: #1a1a1a;
+		--white: #f4f4f4;
+		--highlight: rgba(212, 175, 55, 0.3);
+	    }
+
+	    body {
+		margin: 0;
+		font-family: 'Montserrat', sans-serif;
+		background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+		            url('Palio2026.jpg') no-repeat center center fixed;
+		background-size: cover;
+		color: var(--white);
+		scroll-behavior: smooth;
+	    }
+
+	    header {
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		padding: 20px;
+	    }
+
+	    /* TITOLI GROSSI CON CONTORNO NERO */
+	    h1, .subtitle {
+		font-family: 'Cinzel', serif;
+		font-size: 4.5rem; /* Molto più grande */
+		color: var(--gold);
+		margin: 10px 0;
+		text-transform: uppercase;
+		/* Contorno nero netto (Text Stroke) */
+		text-shadow: 
+		    -2px -2px 0 #000,  
+		     2px -2px 0 #000,
+		    -2px  2px 0 #000,
+		     2px  2px 0 #000,
+		     0px 0px 20px rgba(0,0,0,0.8);
+		animation: glow 2s ease-in-out infinite alternate;
+	    }
+
+	    @keyframes glow {
+		from { filter: drop-shadow(0 0 5px var(--gold)); }
+		to { filter: drop-shadow(0 0 15px #fff); }
+	    }
+
+	    /* COUNTDOWN PIÙ GROSSO */
+	    .countdown {
+		font-size: 3rem; /* Ingrandito */
+		font-weight: bold;
+		background: rgba(0, 0, 0, 0.7);
+		padding: 30px 50px;
+		border-radius: 15px;
+		border: 3px solid var(--gold);
+		margin-top: 30px;
+		box-shadow: 0 0 20px rgba(0,0,0,0.5);
+	    }
+
+	    section {
+		padding: 60px 20px;
+		max-width: 1000px;
+		margin: 40px auto;
+		background: rgba(0, 0, 0, 0.85);
+		border-radius: 15px;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	    }
+
+	    h2 {
+		color: var(--gold);
+		border-bottom: 2px solid var(--gold);
+		padding-bottom: 10px;
+		margin-bottom: 30px;
+		font-family: 'Cinzel', serif;
+	    }
+
+	    .table-container { overflow-x: auto; }
+
+	    table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 20px;
+		min-width: 600px;
+	    }
+
+	    th, td {
+		padding: 15px;
+		border-bottom: 1px solid #444;
+		text-align: center;
+	    }
+
+	    th { 
+		color: var(--gold); 
+		background-color: rgba(255,255,255,0.05);
+	    }
+
+	    .today-highlight {
+		background-color: var(--highlight) !important;
+		border: 2px solid var(--gold);
+	    }
+
+	    form {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+		max-width: 600px;
+		margin: auto;
+	    }
+
+	    input, select, button {
+		padding: 12px;
+		border-radius: 5px;
+		border: 1px solid #444;
+		font-size: 1rem;
+	    }
+
+	    button {
+		background: var(--gold);
+		color: var(--dark);
+		font-weight: bold;
+		cursor: pointer;
+		transition: 0.3s;
+		border: none;
+		padding: 20px;
+	    }
+
+	    button:hover { background: #fff; transform: scale(1.05); }
+
+	    /* Stile per elenchi puntati nelle tabelle */
+	    td ul {
+		text-align: left;
+		list-style-type: none;
+		padding-left: 20px;
+	    }
+	    td li::before {
+		content: "✦";
+		color: var(--gold);
+		margin-right: 10px;
+	    }
+
+	    /* Responsive per schermi piccoli */
+	    @media (max-width: 768px) {
+		h1, .subtitle { font-size: 2.5rem; }
+		.countdown { font-size: 1.5rem; padding: 20px; }
+	    }
+	</style>
+</head>
+
+<body>
+
+<header>
+    <h1>PALIO DELLE CONTRADE 2026</h1>
+    <div class="subtitle">30esima Edizione</div>
+    <div class="countdown" id="timer">Caricamento...</div>
+</header>
+
+<section id="classifica">
+    <h2>🏆 Classifica Generale e Punteggi Giochi</h2>
+    <p style="text-align:center; font-style:italic; color: #aaa; margin-bottom: 20px;">
+        (Scorri orizzontalmente su cellulare)
+    </p>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Contrada</th>
+                    <th>Corsa Sacchi</th>
+                    <th>Tiro Fune</th>
+                    <th>Staffetta</th>
+                    <th>Dama</th>
+                    <th>Carte</th>
+                    <th style="color: var(--white); background-color: var(--gold);">PUNTI TOTALI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:left;">🔴 ROSSI</td>
+                    <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td>0</td> <td style="font-weight:bold; font-size:1.2rem;">0</td> </tr>
+                <tr>
+                    <td style="text-align:left;">🔵 AZZURRI</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="font-weight:bold; font-size:1.2rem;">0</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">🟢 VERDI</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="font-weight:bold; font-size:1.2rem;">0</td>
+                </tr>
+                <tr>
+                    <td style="text-align:left;">🟡 GIALLI</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="font-weight:bold; font-size:1.2rem;">0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section id="programma">
+    <h2>📅 Programma delle Giornate</h2>
+    <div class="table-container">
+        <table id="tabella-programma">
+            <thead>
+                <tr>
+                    <th>Giorno</th>
+                    <th>Data</th>
+                    <th>Attività e Giochi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-date="2026-05-28">
+		    <td>Giornata 1</td>
+		    <td>28 Maggio 2026</td>
+		    <td>
+			<ul style="text-align: left; margin: 0; padding-left: 20px;">
+			    <li>Presentazione ufficiale</li>
+			    <li>Sorteggio delle sfide</li>
+			    <li>Consegna delle divise</li>
+			    <li>Aperitivo di benvenuto</li>
+			</ul>
+		    </td>
+		</tr>
+
+                <tr data-date="2026-04-01">
+		    <td>Giornata Test</td>
+		    <td>29 Maggio 2026</td>
+		    <td>
+			<ul style="text-align: left; margin: 0; padding-left: 20px;">
+			    <li>Presentazione ufficiale</li>
+			    <li>Sorteggio delle sfide</li>
+			    <li>Consegna delle divise</li>
+			    <li>Aperitivo di benvenuto</li>
+			</ul>
+		    </td>
+		</tr>
+		
+                <tr data-date="2026-05-30">
+		    <td>Giornata Test</td>
+		    <td>30 Maggio 2026</td>
+		    <td>
+			<ul style="text-align: left; margin: 0; padding-left: 20px;">
+			    <li>Presentazione ufficiale</li>
+			    <li>Sorteggio delle sfide</li>
+			    <li>Consegna delle divise</li>
+			    <li>Aperitivo di benvenuto</li>
+			</ul>
+		    </td>
+		</tr>
+                
+                <tr data-date="2026-05-31">
+		    <td>Giornata Test</td>
+		    <td>31 Maggio 2026</td>
+		    <td>
+			<ul style="text-align: left; margin: 0; padding-left: 20px;">
+			    <li>Presentazione ufficiale</li>
+			    <li>Sorteggio delle sfide</li>
+			    <li>Consegna delle divise</li>
+			    <li>Aperitivo di benvenuto</li>
+			</ul>
+		    </td>
+		</tr>
+                
+                <tr data-date="2026-08-18">
+                    <td>Giornata Finale</td>
+                    <td>Martedì 18 Agosto 2026</td>
+                    <td>Finalissima Tiro alla Fune, Proclamazione Vincitore, Cena di Gala</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section id="iscrizione">
+    <h2>📝 Richiesta di partecipazione ai giochi</h2>
+    <form action="https://formsubmit.co/tua@email.com" method="POST">
+        
+        <input type="hidden" name="_next" value="https://tuosito.github.io/grazie.html">
+        <input type="hidden" name="_subject" value="Nuova Iscrizione Palio 2026!">
+
+        <label>Nome e Cognome</label>
+        <input type="text" name="Nominativo" required>
+
+        <label>Anno di Nascita</label>
+        <input type="number" name="Anno" min="1930" max="2026" required>
+
+        <label>Cellulare (WhatsApp)</label>
+        <input type="tel" name="Telefono" required>
+
+        <label>Scegli la tua contrada (il tuo capitano ti risponderà prima possibile!)</label>
+        <select name="Contrada" required>
+            <option value="ROSSI">ROSSI (Email: giuliobordieri443@gmail.com)</option>
+            <option value="AZZURRI">AZZURRI (Email: giuliobordieri443@gmail.com)</option>
+            <option value="VERDI">VERDI (Email: giuliobordieri443@gmail.com)</option>
+            <option value="GIALLI">GIALLI (Email: giuliobordieri443@gmail.com)</option>
+        </select>
+
+        <label>A quali giochi vorresti partecipare?</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr;">
+            <label><input type="checkbox" name="Gioco" value="Corsa Sacchi"> Corsa nei Sacchi</label>
+            <label><input type="checkbox" name="Gioco" value="Tiro Fune"> Tiro alla Fune</label>
+            <label><input type="checkbox" name="Gioco" value="Staffetta"> Staffetta</label>
+            <label><input type="checkbox" name="Gioco" value="Dama"> Torneo di Dama</label>
+        </div>
+
+        <button type="submit">INVIA ISCRIZIONE</button>
+    </form>
+</section>
+
+<script>
+    // --- 1. LOGICA COUNTDOWN ---
+    // Imposta la data di inizio del Palio
+    const targetDate = new Date("May 28, 2026 18:00:00").getTime();
+
+    const timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const gap = targetDate - now;
+
+        // Calcoli per giorni, ore, minuti, secondi
+        const second = 1000;
+        const minute = second * 60;
+        const hour = minute * 60;
+        const day = hour * 24;
+
+        const d = Math.floor(gap / day);
+        const h = Math.floor((gap % day) / hour);
+        const m = Math.floor((gap % hour) / minute);
+        const s = Math.floor((gap % minute) / second);
+
+        document.getElementById("timer").innerHTML = `Mancano: ${d}g ${h}h ${m}m ${s}s`;
+
+        // Se il countdown è finito
+        if (gap < 0) {
+            clearInterval(timerInterval);
+            document.getElementById("timer").innerHTML = "IL PALIO È INIZIATO!";
+        }
+    }, 1000);
+
+
+    // --- 2. LOGICA EVIDENZIAZIONE PROGRAMMA ---
+    function highlightCurrentDay() {
+        const table = document.getElementById('tabella-programma');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        
+        // Ottieni la data di oggi in formato YYYY-MM-DD (usando fuso orario locale)
+        const now = new Date();
+        const offset = now.getTimezoneOffset();
+        const localNow = new Date(now.getTime() - (offset*60*1000));
+        const todayStr = localNow.toISOString().split('T')[0];
+
+        // Per testare l'evidenziazione oggi, decommenta la riga sotto e metti una data del programma
+        // const todayStr = "2026-08-16"; 
+
+        for (let i = 0; i < rows.length; i++) {
+            const rowDate = rows[i].getAttribute('data-date');
+            if (rowDate === todayStr) {
+                rows[i].classList.add('today-highlight');
+                // Opzionale: scorri automaticamente alla riga evidenziata
+                rows[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }
+
+    // Esegui la funzione al caricamento della pagina
+    window.onload = highlightCurrentDay;
+</script>
+
+</body>
+</html>
