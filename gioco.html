@@ -3,43 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gran Torneo dei Destrieri - Palio 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Palio 2026 - La Corsa dei Destrieri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --dark: #1a1a1a; }
-        body { background: #000; color: white; font-family: 'Open Sans', sans-serif; text-align: center; padding: 20px; }
-        h1, h2 { font-family: 'Cinzel', serif; color: var(--gold); }
+        :root { --gold: #d4af37; --grass: #567d46; --dirt: #8b5a2b; }
+        body { background: #1a1a1a; color: white; font-family: 'Open Sans', sans-serif; text-align: center; padding: 10px; margin: 0; }
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         
-        .container { max-width: 900px; margin: 0 auto; background: #2c1e12; padding: 20px; border-radius: 20px; border: 3px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .container { max-width: 800px; margin: 0 auto; background: #2c1e12; padding: 20px; border-radius: 15px; border: 3px solid var(--gold); }
         
-        #wallet-display { font-size: 1.8rem; color: #4dff4d; margin: 15px 0; text-shadow: 2px 2px 5px black; }
+        #wallet-display { font-size: 2rem; color: #4dff4d; font-weight: bold; margin-bottom: 20px; }
         
-        .betting-panel { background: rgba(0,0,0,0.6); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #5d4037; }
-        select, input, button { padding: 12px; font-size: 1rem; border-radius: 8px; border: none; outline: none; margin: 5px; }
+        .betting-panel { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 20px; }
+        select, input, button { padding: 12px; font-size: 1rem; border-radius: 5px; border: none; margin: 5px; }
         
-        #start-race-btn { background: var(--gold); color: black; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        #start-race-btn { background: var(--gold); color: black; font-weight: bold; cursor: pointer; width: 200px; }
         #start-race-btn:disabled { background: #555; cursor: not-allowed; }
-        
-        #race-track { position: relative; background: #5d4037; border: 5px solid #3e2723; border-radius: 10px; overflow: hidden; display: none; margin-top: 20px; }
-        .finish-line { position: absolute; right: 60px; top: 0; bottom: 0; width: 10px; background: repeating-linear-gradient(0deg, #fff, #fff 10px, #000 10px, #000 20px); z-index: 1; }
-        
-        .lane { position: relative; height: 55px; border-bottom: 2px solid #4e342e; display: flex; align-items: center; }
-        .horse-sprite { position: absolute; left: 0; font-size: 30px; transition: left 0.1s linear; white-space: nowrap; filter: drop-shadow(2px 2px 2px black); }
-        .horse-name { font-size: 10px; display: block; text-transform: uppercase; font-weight: bold; }
 
-        .btn-home { display: inline-block; margin-top: 30px; color: var(--gold); text-decoration: none; font-weight: bold; border: 1px solid var(--gold); padding: 10px 20px; border-radius: 5px; transition: 0.3s; }
-        .btn-home:hover { background: var(--gold); color: black; }
+        /* Grafica Pista */
+        #race-track { 
+            position: relative; 
+            background: var(--dirt); 
+            border: 8px solid #3e2723; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            display: none; 
+            margin-top: 20px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+        
+        .finish-line { 
+            position: absolute; 
+            right: 70px; 
+            top: 0; 
+            bottom: 0; 
+            width: 15px; 
+            background: repeating-linear-gradient(0deg, #fff, #fff 10px, #000 10px, #000 20px); 
+            z-index: 10;
+            border-left: 2px solid gold;
+        }
+
+        .lane { 
+            position: relative; 
+            height: 70px; 
+            border-bottom: 3px solid rgba(255,255,255,0.1); 
+            display: flex; 
+            align-items: center; 
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .horse-sprite { 
+            position: absolute; 
+            left: 10px; 
+            font-size: 40px; 
+            z-index: 5;
+            filter: drop-shadow(2px 4px 2px rgba(0,0,0,0.8));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .horse-name { font-size: 12px; font-weight: bold; text-transform: uppercase; background: rgba(0,0,0,0.7); padding: 2px 5px; border-radius: 3px; margin-top: -5px; }
+
+        .energy-bar-bg { width: 100px; height: 8px; background: #444; border-radius: 4px; display: inline-block; vertical-align: middle; margin-left: 10px; }
+        .energy-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+        .btn-home { display: inline-block; margin-top: 20px; color: var(--gold); text-decoration: none; font-weight: bold; border: 1px solid var(--gold); padding: 10px 20px; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <h1>🐎 IL TORNEO DEI DESTRIERI</h1>
+    <h1>🏇 TORNEO DELLE QUATTRO CONTRADE</h1>
     
     <div class="container">
-        <div id="wallet-display">💰 CREDITI: <span id="credits">5</span></div>
+        <div id="wallet-display">💰 <span id="credits">5</span> MONETE</div>
 
         <div class="betting-panel">
-            <p>Scegli il tuo campione e punta (1-5 monete):</p>
+            <label>Punta su un Destriero:</label><br>
             <select id="horse-select"></select>
             <input type="number" id="bet-amount" min="1" max="5" value="1">
             <button id="start-race-btn" onclick="startRace()">COMINCIA LA GARA</button>
@@ -50,29 +90,27 @@
             <div id="lanes-container"></div>
         </div>
 
-        <div id="race-result" style="margin-top: 25px; font-size: 1.8rem; font-family: 'Cinzel'; min-height: 50px;"></div>
+        <div id="race-result" style="margin-top: 20px; font-size: 1.8rem; font-family: 'Cinzel'; min-height: 60px;"></div>
     </div>
 
-    <a href="index.html" class="btn-home">⬅️ RITORNA ALLA HOME DEL PALIO</a>
+    <a href="index.html" class="btn-home">⬅️ TORNA AL VILLAGGIO</a>
 
     <script>
         let totalCredits = 5;
+        // 4 Cavalli, uno per contrada
         const horses = [
-            { id: 1, name: "Furia Rossa", color: "#ff4d4d", stars: 5 },
-            { id: 2, name: "Rubino", color: "#ff4d4d", stars: 3 },
-            { id: 3, name: "Levriero Blu", color: "#4d94ff", stars: 4 },
-            { id: 4, name: "Abisso", color: "#4d94ff", stars: 2 },
-            { id: 5, name: "Smeraldo", color: "#4dff4d", stars: 5 },
-            { id: 6, name: "Bosco Vivo", color: "#4dff4d", stars: 1 },
-            { id: 7, name: "Fulmine Giallo", color: "#ffff4d", stars: 4 },
-            { id: 8, name: "Pepita d'Oro", color: "#ffff4d", stars: 3 }
+            { id: 1, name: "Furia Rossa", color: "#ff4d4d", energy: 90 },
+            { id: 2, name: "Levriero Blu", color: "#4d94ff", energy: 75 },
+            { id: 3, name: "Smeraldo", color: "#4dff4d", energy: 85 },
+            { id: 4, name: "Fulmine Giallo", color: "#ffff4d", energy: 60 }
         ];
 
         const select = document.getElementById('horse-select');
         horses.forEach(h => {
             let opt = document.createElement('option');
             opt.value = h.id;
-            opt.innerHTML = `${h.name} (${'⭐'.repeat(h.stars)})`;
+            // Visualizzazione energia con barra colorata nel menu
+            opt.innerHTML = `${h.name} (Energia: ${h.energy}%)`;
             select.appendChild(opt);
         });
 
@@ -81,50 +119,76 @@
             const selectedHorseId = parseInt(select.value);
             const track = document.getElementById('race-track');
             const resultDiv = document.getElementById('race-result');
+            const btn = document.getElementById('start-race-btn');
 
             if (betAmount > totalCredits || betAmount < 1 || betAmount > 5) {
-                alert("Puntata non valida! (Max 5 crediti)");
+                alert("Puntata non valida! Puoi puntare da 1 a 5 monete se le possiedi.");
                 return;
             }
 
+            // Inizio gara
             totalCredits -= betAmount;
             document.getElementById('credits').innerHTML = totalCredits;
-            resultDiv.innerHTML = "I cancelli si aprono...";
+            resultDiv.innerHTML = "I cancelli si aprono... PARTITI!";
+            resultDiv.style.color = "white";
             track.style.display = 'block';
-            document.getElementById('start-race-btn').disabled = true;
+            btn.disabled = true;
 
             const container = document.getElementById('lanes-container');
             container.innerHTML = "";
-            const horseStates = horses.map(h => ({ ...h, pos: 0 }));
+            const horseStates = horses.map(h => ({ ...h, pos: 10 }));
 
             horseStates.forEach(h => {
                 const lane = document.createElement('div');
                 lane.className = "lane";
-                lane.innerHTML = `<div id="h-${h.id}" class="horse-sprite">🏇<span class="horse-name" style="color:${h.color}">${h.name}</span></div>`;
+                lane.innerHTML = `
+                    <div id="h-${h.id}" class="horse-sprite">
+                        🏇
+                        <span class="horse-name" style="color:${h.color}">${h.name}</span>
+                    </div>
+                `;
                 container.appendChild(lane);
             });
 
             const raceInterval = setInterval(() => {
-                let winner = null;
+                let winnerFound = null;
+
                 horseStates.forEach(h => {
-                    h.pos += Math.random() * (h.stars * 1.5) + (Math.random() * 6);
+                    // Logica energia: l'energia aumenta la base del movimento casuale
+                    const spintaEnergia = (h.energy / 20); 
+                    h.pos += (Math.random() * spintaEnergia) + (Math.random() * 5);
+                    
                     const el = document.getElementById(`h-${h.id}`);
                     el.style.left = h.pos + "px";
-                    if (h.pos >= track.clientWidth - 90 && !winner) winner = h;
+
+                    // Controllo traguardo: la linea è a trackWidth - 90px
+                    if (h.pos >= track.clientWidth - 90) {
+                        if (!winnerFound) winnerFound = h;
+                    }
                 });
 
-                if (winner) {
+                if (winnerFound) {
                     clearInterval(raceInterval);
-                    const won = winner.id === selectedHorseId;
-                    if(won) totalCredits += (betAmount * 2);
+                    const won = winnerFound.id === selectedHorseId;
+                    
+                    if(won) {
+                        totalCredits += (betAmount * 2);
+                        resultDiv.innerHTML = `🏆 TRIONFO! <br> ${winnerFound.name} vince per te!`;
+                        resultDiv.style.color = "#4dff4d";
+                    } else {
+                        resultDiv.innerHTML = `💀 SCONFITTA! <br> ${winnerFound.name} ha tagliato il traguardo.`;
+                        resultDiv.style.color = "#ff4d4d";
+                    }
                     
                     document.getElementById('credits').innerHTML = totalCredits;
-                    resultDiv.innerHTML = won ? `🏆 TRIONFO! ${winner.name} vince!` : `💀 SCONFITTA! Ha vinto ${winner.name}`;
-                    resultDiv.style.color = won ? "#4dff4d" : "#ff4d4d";
-                    document.getElementById('start-race-btn').disabled = totalCredits <= 0;
-                    if(totalCredits <= 0) resultDiv.innerHTML += "<br><small>CREDITI ESAURITI. RICARICA LA PAGINA!</small>";
+                    
+                    if(totalCredits <= 0) {
+                        resultDiv.innerHTML += "<br><small style='font-size:1rem'>HAI FINITO LE MONETE. RICARICA LA PAGINA PER RICEVERNE ALTRE!</small>";
+                    } else {
+                        btn.disabled = false;
+                    }
                 }
-            }, 80).getTime();
+            }, 50); // Più veloce e fluido
         }
     </script>
 </body>
