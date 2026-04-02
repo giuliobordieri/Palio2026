@@ -107,7 +107,7 @@
                 opt.value = h.id;
                 // Emoji per indicare visivamente la forza
                 let mood = h.energy > 80 ? "🔥" : h.energy > 50 ? "⚡" : "💤";
-                opt.innerHTML = `${mood} ${h.name} (E: ${h.energy}%)`;
+                opt.innerHTML = `${mood} ${h.name} (Energia: ${h.energy}%)`;
                 select.appendChild(opt);
             });
         }
