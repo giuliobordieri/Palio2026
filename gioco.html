@@ -151,9 +151,14 @@
                 let winnerFound = null;
 
                 horseStates.forEach(h => {
-                    // L'energia influenza la velocità base
-                    let boost = h.energy / 22; 
-                    h.pos += (Math.random() * boost) + (Math.random() * 4.5);
+                    // Funzione che "schiaccia" i valori alti e penalizza i bassi
+		    let boost = Math.sqrt(h.energy) * 1.2; 
+
+		    // Aggiungiamo un piccolo "malus" extra se l'energia è sotto il 50%
+		    if (h.energy < 50) {
+		        boost *= 0.8; 
+		    } 
+		    h.pos += (Math.random() * boost) + (Math.random() * 4);
                     
                     const el = document.getElementById(`h-${h.id}`);
                     el.style.left = h.pos + "px";
