@@ -57,9 +57,40 @@
 
         .btn-home { display: inline-block; margin-top: 25px; color: var(--gold); text-decoration: none; font-weight: bold; border: 1px solid var(--gold); padding: 12px 25px; border-radius: 8px; transition: 0.3s; }
         .btn-home:hover { background: var(--gold); color: black; }
+        
+        /* Messaggio di rotazione obbligatoria */
+	#rotate-message {
+	    display: none;
+	    position: fixed;
+	    top: 0; left: 0;
+	    width: 100%; height: 100%;
+	    background: #1a1a1a;
+	    color: var(--gold);
+	    z-index: 9999;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	    text-align: center;
+	    font-family: 'Cinzel', serif;
+	}
+
+	/* Se lo schermo è più alto che largo (Portrait), mostra il messaggio */
+	@media screen and (orientation: portrait) {
+	    #rotate-message {
+		display: flex;
+	    }
+	    .container, h1, .btn-home {
+		display: none; /* Nasconde il gioco per obbligarli a girare */
+	    }
+	}
     </style>
 </head>
 <body>
+	<div id="rotate-message">
+	    <div style="font-size: 50px;">🔄</div>
+	    <h2>RUOTA IL DISPOSITIVO</h2>
+	    <p>Il Torneo dei Destrieri richiede la visuale panoramica per una corsa epica!</p>
+	</div>
 
     <h1>🏇 GRAN TORNEO DEI DESTRIERI</h1>
     
@@ -151,10 +182,10 @@
                 let winnerFound = null;
 
                 horseStates.forEach(h => {
-                    // Funzione che "schiaccia" i valori alti e penalizza i bassi
-		    let boost = Math.sqrt(h.energy) * 1.2; 
+               
+		    let boost = 1; 
 
-		    // Aggiungiamo un piccolo "malus" extra se l'energia è sotto il 50%
+		    // Aggiungiamo un piccolo "malus" se l'energia è sotto il 50%
 		    if (h.energy < 50) {
 		        boost *= 0.8; 
 		    } 
