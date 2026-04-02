@@ -10,7 +10,7 @@
         body { background: #1a1a1a; color: white; font-family: 'Open Sans', sans-serif; text-align: center; padding: 10px; margin: 0; }
         h1 { font-family: 'Cinzel', serif; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin-bottom: 10px; }
         
-        .container { max-width: 850px; margin: 0 auto; background: #2c1e12; padding: 20px; border-radius: 15px; border: 3px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.7); }
+        .container { max-width: 850px; margin: 0 auto; background: #2c1e12; padding: 20px; border-radius: 15px; border: 3px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.7); position: relative; }
         
         #wallet-display { font-size: 2.2rem; color: #4dff4d; font-weight: bold; margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
         
@@ -59,38 +59,46 @@
         .btn-home:hover { background: var(--gold); color: black; }
         
         /* Messaggio di rotazione obbligatoria */
-	#rotate-message {
-	    display: none;
-	    position: fixed;
-	    top: 0; left: 0;
-	    width: 100%; height: 100%;
-	    background: #1a1a1a;
-	    color: var(--gold);
-	    z-index: 9999;
-	    flex-direction: column;
-	    justify-content: center;
-	    align-items: center;
-	    text-align: center;
-	    font-family: 'Cinzel', serif;
-	}
+        #rotate-message {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #1a1a1a;
+            color: var(--gold);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+        }
 
-	/* Se lo schermo è più alto che largo (Portrait), mostra il messaggio */
-	@media screen and (orientation: portrait) {
-	    #rotate-message {
-		display: flex;
-	    }
-	    .container, h1, .btn-home {
-		display: none; /* Nasconde il gioco per obbligarli a girare */
-	    }
-	}
+        @media screen and (orientation: portrait) {
+            #rotate-message { display: flex; }
+            .container, h1, .btn-home { display: none; }
+        }
+
+        /* --- NUOVI STILI OVERLAY FINALE --- */
+        #end-race-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 100; border-radius: 8px; animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .cup-emoji, .sad-emoji { font-size: 6rem; margin-bottom: 10px; }
+        .win-title { font-size: 2.5rem; color: #4dff4d; font-family: 'Cinzel'; text-shadow: 0 0 15px #4dff4d; margin: 0; }
+        .lose-title { font-size: 2.5rem; color: #ff4d4d; font-family: 'Cinzel'; margin: 0; }
+        .firework { position: absolute; width: 4px; height: 4px; border-radius: 50%; animation: explode 1s ease-out forwards; }
+        @keyframes explode { 0% { transform: translate(0, 0); opacity: 1; } 100% { transform: translate(var(--x), var(--y)); opacity: 0; } }
     </style>
 </head>
 <body>
-	<div id="rotate-message">
-	    <div style="font-size: 50px;">🔄</div>
-	    <h2>RUOTA IL DISPOSITIVO</h2>
-	    <p>Il Torneo dei Destrieri richiede la visuale panoramica per una corsa epica!</p>
-	</div>
+    <div id="rotate-message">
+        <div style="font-size: 50px;">🔄</div>
+        <h2>RUOTA IL DISPOSITIVO</h2>
+        <p>Il Torneo dei Destrieri richiede la visuale panoramica per una corsa epica!</p>
+    </div>
 
     <h1>🏇 GRAN TORNEO DEI DESTRIERI</h1>
     
@@ -105,6 +113,7 @@
         </div>
 
         <div id="race-track">
+            <div id="end-race-overlay"></div>
             <div class="finish-line"></div>
             <div id="lanes-container"></div>
         </div>
@@ -118,29 +127,44 @@
         let totalCredits = 5;
         let horses = [
             { id: 1, name: "Furia Rossa", color: "#ff4d4d", energy: 0 },
-            { id: 2, name: "Levriero Blu", color: "#4d94ff", energy: 0 },
+            { id: 2, name: "Onda Blu", color: "#4d94ff", energy: 0 },
             { id: 3, name: "Smeraldo", color: "#4dff4d", energy: 0 },
-            { id: 4, name: "Fulmine Giallo", color: "#ffff4d", energy: 0 }
+            { id: 4, name: "Fulmine", color: "#ffff4d", energy: 0 }
         ];
 
-        // Inizializza il gioco
         refreshEnergies();
 
         function refreshEnergies() {
             const select = document.getElementById('horse-select');
             select.innerHTML = "";
-            
             horses.forEach(h => {
-                // Energia casuale tra 30 e 95 per ogni partita
                 h.energy = Math.floor(Math.random() * (95 - 30 + 1)) + 30;
-                
                 let opt = document.createElement('option');
                 opt.value = h.id;
-                // Emoji per indicare visivamente la forza
                 let mood = h.energy > 80 ? "🔥" : h.energy > 50 ? "⚡" : "💤";
                 opt.innerHTML = `${mood} ${h.name} (Energia: ${h.energy}%)`;
                 select.appendChild(opt);
             });
+        }
+
+        // Funzione per i fuochi d'artificio
+        function createFirework() {
+            const track = document.getElementById('race-track');
+            const colors = ['#ff4d4d', '#4d94ff', '#4dff4d', '#ffff4d', '#d4af37'];
+            const originX = track.clientWidth * 0.5 + (Math.random() * track.clientWidth * 0.3);
+            const originY = track.clientHeight * 0.4;
+
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'firework';
+                p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                p.style.left = originX + 'px';
+                p.style.top = originY + 'px';
+                p.style.setProperty('--x', (Math.random() - 0.5) * 400 + 'px');
+                p.style.setProperty('--y', (Math.random() - 0.5) * 400 + 'px');
+                track.appendChild(p);
+                setTimeout(() => p.remove(), 1000);
+            }
         }
 
         function startRace() {
@@ -149,12 +173,14 @@
             const track = document.getElementById('race-track');
             const resultDiv = document.getElementById('race-result');
             const btn = document.getElementById('start-race-btn');
+            const overlay = document.getElementById('end-race-overlay');
 
             if (betAmount > totalCredits || betAmount < 1 || betAmount > 5) {
                 alert("Puntata non valida!");
                 return;
             }
 
+            overlay.style.display = 'none';
             totalCredits -= betAmount;
             document.getElementById('credits').innerHTML = totalCredits;
             resultDiv.innerHTML = "I cancelli si spalancano... PARTITI!";
@@ -182,14 +208,11 @@
                 let winnerFound = null;
 
                 horseStates.forEach(h => {
-               
-		    let boost = 1; 
-
-		    // Aggiungiamo un piccolo "malus" se l'energia è sotto il 50%
-		    if (h.energy < 50) {
-		        boost *= 0.8; 
-		    } 
-		    h.pos += (Math.random() * boost) + (Math.random() * 3);
+                    let boost = 1; 
+                    if (h.energy < 60) {
+                        boost *= 0.8; 
+                    } 
+                    h.pos += (Math.random() * boost) + (Math.random() * 3);
                     
                     const el = document.getElementById(`h-${h.id}`);
                     el.style.left = h.pos + "px";
@@ -203,22 +226,29 @@
                     clearInterval(raceInterval);
                     const won = winnerFound.id === selectedHorseId;
                     
+                    // Mostra Overlay
+                    overlay.style.display = 'flex';
                     if(won) {
                         totalCredits += (betAmount * 2);
-                        resultDiv.innerHTML = `<span style="color:var(--gold)">VITTORIA EPICA!</span><br>${winnerFound.name} ti ha fatto raddoppiare!`;
+                        overlay.innerHTML = `<div class="cup-emoji">🏆</div><h2 class="win-title">VITTORIA!</h2><p style="color:var(--gold)">${winnerFound.name} ti ha fatto raddoppiare!</p>`;
+                        resultDiv.innerHTML = `<span style="color:var(--gold)">VITTORIA EPICA!</span>`;
+                        for(let i=0; i<3; i++) setTimeout(createFirework, i*300);
                     } else {
-                        resultDiv.innerHTML = `<span style="color:#ff4d4d">SCONFITTA!</span><br>${winnerFound.name} ha vinto la gara.`;
+                        overlay.innerHTML = `<div class="sad-emoji">😭</div><h2 class="lose-title">SCONFITTA</h2><p style="color:#aaa">${winnerFound.name} ha vinto la gara.</p>`;
+                        resultDiv.innerHTML = `<span style="color:#ff4d4d">SCONFITTA!</span>`;
                     }
                     
                     document.getElementById('credits').innerHTML = totalCredits;
                     
-                    if(totalCredits <= 0) {
-                        resultDiv.innerHTML += "<br><small style='color:#777'>MONETE ESAURITE. RICARICA LA PAGINA!</small>";
-                    } else {
-                        btn.disabled = false;
-                        // Rimescola le energie per la prossima gara
-                        refreshEnergies();
-                    }
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        if(totalCredits <= 0) {
+                            resultDiv.innerHTML += "<br><small style='color:#777'>MONETE ESAURITE. RICARICA LA PAGINA!</small>";
+                        } else {
+                            btn.disabled = false;
+                            refreshEnergies();
+                        }
+                    }, 4000); // L'overlay sparisce dopo 4 secondi per permettere una nuova giocata
                 }
             }, 50);
         }
