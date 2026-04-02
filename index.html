@@ -294,9 +294,9 @@
 
 <section id="iscrizione">
     <h2>📝 Richiesta di partecipazione ai giochi</h2>
-    <form action="https://formsubmit.co/tua@email.com" method="POST">
+    <form id="form-palio" action="https://formsubmit.co/giuliobordieri443@gmail.com" method="POST">
         
-        <input type="hidden" name="_next" value="https://tuosito.github.io/grazie.html">
+        <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_subject" value="Nuova Iscrizione Palio 2026!">
 
         <label>Nome e Cognome</label>
@@ -308,16 +308,16 @@
         <label>Cellulare (WhatsApp)</label>
         <input type="tel" name="Telefono" required>
 
-        <label>Scegli la tua contrada (il tuo capitano ti risponderà prima possibile!)</label>
-        <select name="Contrada" required>
-            <option value="ROSSI">ROSSI (Email: giuliobordieri443@gmail.com)</option>
-            <option value="AZZURRI">AZZURRI (Email: giuliobordieri443@gmail.com)</option>
-            <option value="VERDI">VERDI (Email: giuliobordieri443@gmail.com)</option>
-            <option value="GIALLI">GIALLI (Email: giuliobordieri443@gmail.com)</option>
+        <label>Scegli la tua contrada:</label>
+        <select id="select-contrada" name="Contrada" required>
+            <option value="ROSSI" data-email="giulio.bordieri@unitn.it">ROSSI</option>
+            <option value="AZZURRI" data-email="giuliobordieri443@gmail.com">AZZURRI</option>
+            <option value="VERDI" data-email="mail_capitano_verdi@gmail.com">VERDI</option>
+            <option value="GIALLI" data-email="mail_capitano_gialli@gmail.com">GIALLI</option>
         </select>
 
         <label>A quali giochi vorresti partecipare?</label>
-        <div style="display:grid; grid-template-columns: 1fr 1fr;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
             <label><input type="checkbox" name="Gioco" value="Corsa Sacchi"> Corsa nei Sacchi</label>
             <label><input type="checkbox" name="Gioco" value="Tiro Fune"> Tiro alla Fune</label>
             <label><input type="checkbox" name="Gioco" value="Staffetta"> Staffetta</label>
@@ -327,6 +327,20 @@
         <button type="submit">INVIA ISCRIZIONE</button>
     </form>
 </section>
+
+<script>
+    const form = document.getElementById('form-palio');
+    const select = document.getElementById('select-contrada');
+
+    form.addEventListener('submit', function(e) {
+        // Prendi l'email associata alla contrada selezionata
+        const selectedOption = select.options[select.selectedIndex];
+        const emailDestinatario = selectedOption.getAttribute('data-email');
+        
+        // Cambia l'action del form dinamicamente
+        form.action = "https://formsubmit.co/" + emailDestinatario;
+    });
+</script>
 
 <script>
     // --- 1. LOGICA COUNTDOWN ---
