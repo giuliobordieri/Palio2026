@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premi Lotteria - Le Contrade</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+            --dark-bg: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--dark-bg);
+            color: var(--gold);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Grafica del Podio */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 10px;
+            margin: 60px 0;
+            height: 350px;
+        }
+
+        .podium-spot {
+            width: 250px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .podium-spot:hover { transform: translateY(-10px); }
+
+        .prize-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 10px; }
+        .prize-desc { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Altezze e colori del podio */
+        .first { height: 300px; background: linear-gradient(to top, var(--gold), #f9e29b); order: 2; border: 3px solid #b8922e; }
+        .second { height: 220px; background: linear-gradient(to top, var(--silver), #e8e8e8); order: 1; border: 3px solid #999; }
+        .third { height: 160px; background: linear-gradient(to top, var(--bronze), #ffb873); order: 3; border: 3px solid #a05a1d; }
+
+        .rank {
+            font-size: 4rem;
+            font-weight: bold;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(0,0,0,0.1);
+        }
+
+        /* Lista altri premi */
+        .others-list {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        h2.section-title {
+            text-align: center;
+            color: var(--dark-bg);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        tr { border-bottom: 1px solid #eee; }
+        tr:last-child { border-bottom: none; }
+        td { padding: 15px; }
+        .pos { font-weight: bold; color: var(--gold); width: 50px; }
+        .prize-name { font-weight: 500; }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .podium-container { flex-direction: column; height: auto; align-items: center; }
+            .podium-spot { width: 90%; height: auto; margin-bottom: 10px; border-radius: 15px; order: unset; }
+            .first { order: 1; } .second { order: 2; } .third { order: 3; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎁 I PREMI DELLA LOTTERIA 🎁</h1>
+    <p>Tanti motivi per tentare la sorte!</p>
+</header>
+
+<div class="container">
+    
+    <h2 class="section-title">Il Podio dei Sogni</h2>
+    
+    <div class="podium-container">
+        <div class="podium-spot first">
+            <div class="prize-title">🥇 PREMIO 1</div>
+            <div class="prize-desc">Descrizione ...</div>
+            <div class="rank">1</div>
+        </div>
+        <div class="podium-spot second">
+            <div class="prize-title">🥈 PREMIO 2</div>
+            <div class="prize-desc">Descrizione ...</div>
+            <div class="rank">2</div>
+        </div>
+        <div class="podium-spot third">
+            <div class="prize-title">🥉 PREMIO 3</div>
+            <div class="prize-desc">Descrizione ...</div>
+            <div class="rank">3</div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Altri Fantastici Premi</h2>
+
+    <div class="others-list">
+        <table>
+            <tbody id="prizes-table">
+                </tbody>
+        </table>
+    </div>
+
+    <a href="index.html" class="back-home">← Torna alla Pagina Principale</a>
+</div>
+
+<script>
+    const premi = [
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+        "Premio",
+    ];
+
+    const tableBody = document.getElementById('prizes-table');
+    
+    premi.forEach((premio, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="pos">${index + 4}°</td>
+            <td class="prize-name">${premio}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+</script>
+
+</body>
+</html>

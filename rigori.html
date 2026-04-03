@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCI DI RIGORE</title>
+    <style>
+        :root {
+            --rossi: #e74c3c;
+            --azzurri: #3498db;
+            --verdi: #2ecc71;
+            --gialli: #f1c40f;
+        }
+
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        #game-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Scelta Contrada */
+        .grid-contrade {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-c {
+            padding: 40px 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border: 4px solid white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-transform: uppercase;
+        }
+        .btn-c:hover { transform: scale(1.05); }
+        .b-rossi { background-color: var(--rossi); color: white; }
+        .b-azzurri { background-color: var(--azzurri); color: white; }
+        .b-verdi { background-color: var(--verdi); color: white; }
+        .b-gialli { background-color: var(--gialli); color: black; }
+
+        /* Campo da gioco */
+        #stadium {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(to bottom, #2ecc71 50%, #27ae60 50%);
+            background-size: 100% 80px;
+            border: 4px solid white;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        #goal {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 160px;
+            border: 8px solid white;
+            border-bottom: none;
+            background: rgba(255,255,255,0.1);
+            z-index: 1;
+        }
+
+        /* Figure stilizzate */
+        .figure { position: absolute; transition: all 0.5s ease; z-index: 5; }
+        .head { width: 22px; height: 22px; background: #ffdbac; border-radius: 50%; margin: 0 auto; }
+        .torso { width: 35px; height: 45px; border-radius: 5px; margin-top: -2px; border: 3px solid black; } 
+        
+        .portiere { top: 100px; left: 50%; transform: translateX(-50%); }
+        .tiratore { bottom: 30px; left: 50%; transform: translateX(-50%); }
+        
+        /* Animazione movimento tiratore */
+        .calcia { transform: translateX(-50%) translateY(-20px) scale(1.1); }
+
+        /* Palla a SCACCHI */
+        .palla {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            background-color: #fff;
+            background-image: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 12px 12px;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            transition: all 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        /* Traiettorie */
+        .tira-sx { bottom: 280px; left: 22%; transform: scale(0.6); }
+        .tira-centro { bottom: 320px; left: 50%; transform: scale(0.6); }
+        .tira-dx { bottom: 280px; left: 78%; transform: scale(0.6); }
+
+        .tuffo-sx { left: 25% !important; top: 130px; transform: rotate(-45deg); }
+        .tuffo-dx { left: 75% !important; top: 130px; transform: rotate(45deg); }
+        
+        /* Messaggio di rotazione obbligatoria */
+        #rotate-message {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #1a1a1a;
+            color: var(--gold);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+        }
+
+        @media screen and (orientation: portrait) {
+            #rotate-message { display: flex; }
+            .container, h1, .btn-home { display: none; }
+        }
+
+        /* UI */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .msg { font-size: 22px; color: #f1c40f; margin: 10px; min-height: 30px; }
+        
+        .controls button {
+            padding: 15px 25px;
+            font-size: 18px;
+            margin: 5px;
+            cursor: pointer;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .controls button:hover { background: #666; }
+
+        .btn-azione {
+            padding: 15px 30px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="rotate-message">
+        <div style="font-size: 50px;">🔄</div>
+        <h2>RUOTA IL DISPOSITIVO</h2>
+        <p>Il Torneo dei Destrieri richiede la visuale panoramica per una corsa epica!</p>
+    </div>
+
+<div id="game-wrapper">
+    <h1>🏆⚽ CALCI DI RIGORE ⚽🏆</h1>
+
+    <div id="scr-select" class="screen active">
+        <h2>Scegli la tua Contrada</h2>
+        <div class="grid-contrade">
+            <button class="btn-c b-rossi" onclick="scegliSquadra('Rossi')">Rossi</button>
+            <button class="btn-c b-azzurri" onclick="scegliSquadra('Azzurri')">Azzurri</button>
+            <button class="btn-c b-verdi" onclick="scegliSquadra('Verdi')">Verdi</button>
+            <button class="btn-c b-gialli" onclick="scegliSquadra('Gialli')">Gialli</button>
+        </div>
+    </div>
+
+    <div id="scr-bracket" class="screen">
+        <h2 id="fase-torneo">Semifinali</h2>
+        <div id="info-scontri" style="font-size: 24px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;"></div>
+        <button class="btn-azione" onclick="vaiAlCampo()">Entra in Campo</button>
+    </div>
+
+    <div id="scr-match" class="screen">
+        <div class="stats">
+            <div><span id="txt-p1">TU</span>: <b id="score-p1">0</b></div>
+            <div id="turno-label">Tiro 1/3</div>
+            <div><span id="txt-cpu">CPU</span>: <b id="score-cpu">0</b></div>
+        </div>
+
+        <div id="feedback" class="msg">Preparati!</div>
+
+        <div id="stadium">
+            <div id="goal"></div>
+            
+            <div id="portiere" class="figure portiere">
+                <div class="head"></div>
+                <div id="maglia-portiere" class="torso"></div>
+            </div>
+
+            <div id="tiratore" class="figure tiratore">
+                <div class="head"></div>
+                <div id="maglia-tiratore" class="torso"></div>
+            </div>
+
+            <div id="palla" class="palla"></div>
+        </div>
+
+        <div id="ctrl-attacco" class="controls">
+            <p>DOVE TIRI?</p>
+            <button onclick="azioneGiocatore('sx')">SINISTRA</button>
+            <button onclick="azioneGiocatore('centro')">CENTRO</button>
+            <button onclick="azioneGiocatore('dx')">DESTRA</button>
+        </div>
+
+        <div id="ctrl-difesa" class="controls" style="display:none;">
+            <p>DOVE TI TUFFI?</p>
+            <button onclick="difesaGiocatore('sx')">SINISTRA</button>
+            <button onclick="difesaGiocatore('centro')">CENTRO</button>
+            <button onclick="difesaGiocatore('dx')">DESTRA</button>
+        </div>
+    </div>
+
+    <div id="scr-result" class="screen">
+        <h2 id="risultato-titolo">FINE PARTITA</h2>
+        <p id="risultato-testo" style="font-size: 20px;"></p>
+        <button id="btn-prosegui" class="btn-azione" onclick="proseguiTorneo()">Continua</button>
+    </div>
+</div>
+
+<script>
+    const teamColors = { "Rossi": "#e74c3c", "Azzurri": "#3498db", "Verdi": "#2ecc71", "Gialli": "#f1c40f" };
+    let miaSquadra = "", mioColore = "", avversario = "", fase = "semi";
+    let p1Punti = 0, cpuPunti = 0, roundAttuale = 1, oltranza = false;
+    const nomiSquadre = Object.keys(teamColors);
+
+    function scegliSquadra(nome) {
+        miaSquadra = nome;
+        mioColore = teamColors[nome];
+        sorteggiaTorneo();
+        mostraSchermo('scr-bracket');
+    }
+
+    function sorteggiaTorneo() {
+        let mischiate = [...nomiSquadre].sort(() => Math.random() - 0.5);
+        if (mischiate[0] === miaSquadra || mischiate[1] === miaSquadra) {
+            avversario = (mischiate[0] === miaSquadra) ? mischiate[1] : mischiate[0];
+        } else {
+            avversario = (mischiate[2] === miaSquadra) ? mischiate[3] : mischiate[2];
+        }
+        document.getElementById('info-scontri').innerHTML = `Semifinale: <b>${miaSquadra}</b> vs <b>${avversario}</b>`;
+    }
+
+    function vaiAlCampo() {
+        p1Punti = 0; cpuPunti = 0; roundAttuale = 1; oltranza = false;
+        aggiornaUI();
+        mostraSchermo('scr-match');
+        setupAttackTurn();
+    }
+
+    function setupAttackTurn() {
+        resetPosizioniBase();
+        // Attacco: Io calcio (mio colore), CPU para (colore avversario)
+        document.getElementById('maglia-tiratore').style.backgroundColor = mioColore;
+        document.getElementById('maglia-portiere').style.backgroundColor = teamColors[avversario];
+        document.getElementById('ctrl-attacco').style.display = "block";
+        document.getElementById('ctrl-difesa').style.display = "none";
+        document.getElementById('feedback').innerText = "Tocca a te tirare!";
+    }
+
+    function setupDefenseTurn() {
+        resetPosizioniBase();
+        // Difesa: CPU calcia (colore avversario), Io paro (mio colore)
+        document.getElementById('maglia-tiratore').style.backgroundColor = teamColors[avversario];
+        document.getElementById('maglia-portiere').style.backgroundColor = mioColore;
+        document.getElementById('ctrl-attacco').style.display = "none";
+        document.getElementById('ctrl-difesa').style.display = "block";
+        document.getElementById('feedback').innerText = "Tira l'avversario! Difendi la porta!";
+    }
+
+    function resetPosizioniBase() {
+        document.getElementById('palla').className = "palla";
+        document.getElementById('portiere').className = "figure portiere";
+        document.getElementById('tiratore').className = "figure tiratore";
+    }
+
+    function azioneGiocatore(lato) {
+        document.getElementById('ctrl-attacco').style.display = "none";
+        let tuffoCpu = ['sx', 'centro', 'dx'][Math.floor(Math.random() * 3)];
+        
+        // Animazione Calcio
+        document.getElementById('tiratore').classList.add('calcia');
+        
+        setTimeout(() => {
+            document.getElementById('palla').classList.add('tira-' + lato);
+            if (tuffoCpu !== 'centro') document.getElementById('portiere').classList.add('tuffo-' + tuffoCpu);
+            
+            setTimeout(() => {
+                if (lato === tuffoCpu) document.getElementById('feedback').innerText = "PARATA! ❌";
+                else { document.getElementById('feedback').innerText = "GOOOOL! ⚽"; p1Punti++; }
+                aggiornaUI();
+                setTimeout(setupDefenseTurn, 1200);
+            }, 600);
+        }, 200);
+    }
+
+    function difesaGiocatore(latoPortiere) {
+        document.getElementById('ctrl-difesa').style.display = "none";
+        let tiroCpu = ['sx', 'centro', 'dx'][Math.floor(Math.random() * 3)];
+
+        // Il giocatore CPU si muove per calciare
+        document.getElementById('tiratore').classList.add('calcia');
+
+        setTimeout(() => {
+            document.getElementById('palla').classList.add('tira-' + tiroCpu);
+            if (latoPortiere !== 'centro') document.getElementById('portiere').classList.add('tuffo-' + latoPortiere);
+
+            setTimeout(() => {
+                if (latoPortiere === tiroCpu) document.getElementById('feedback').innerText = "PARATA! 🧤";
+                else { document.getElementById('feedback').innerText = "GOL... 🥅"; cpuPunti++; }
+                aggiornaUI();
+                setTimeout(controllaFineRound, 1200);
+            }, 600);
+        }, 200);
+    }
+
+    function controllaFineRound() {
+        if (!oltranza) {
+            if (roundAttuale < 3) { roundAttuale++; setupAttackTurn(); }
+            else { 
+                if (p1Punti === cpuPunti) { oltranza = true; setupAttackTurn(); }
+                else finePartita(); 
+            }
+        } else {
+            if (p1Punti !== cpuPunti) finePartita();
+            else setupAttackTurn();
+        }
+    }
+
+    function finePartita() {
+        mostraSchermo('scr-result');
+        let vinto = p1Punti > cpuPunti;
+        document.getElementById('risultato-testo').innerText = `Punteggio finale: ${p1Punti} - ${cpuPunti}`;
+        if (vinto) {
+            if (fase === "semi") {
+                document.getElementById('risultato-titolo').innerText = "SEI IN FINALE! 🎉";
+                document.getElementById('btn-prosegui').innerText = "Vai alla Finale";
+            } else {
+                document.getElementById('risultato-titolo').innerText = "CAMPIONE! 🏆";
+                document.getElementById('btn-prosegui').onclick = () => location.reload();
+            }
+        } else {
+            document.getElementById('risultato-titolo').innerText = "HAI PERSO... 😢";
+            document.getElementById('btn-prosegui').onclick = () => location.reload();
+        }
+    }
+
+    function proseguiTorneo() {
+        if (fase === "semi") {
+            fase = "finale";
+            let rimanenti = nomiSquadre.filter(s => s !== miaSquadra && s !== avversario);
+            avversario = rimanenti[Math.floor(Math.random() * rimanenti.length)];
+            document.getElementById('fase-torneo').innerText = "FINALISSIMA";
+            document.getElementById('info-scontri').innerHTML = `FINALE: <b>${miaSquadra}</b> vs <b>${avversario}</b>`;
+            mostraSchermo('scr-bracket');
+        }
+    }
+
+    function aggiornaUI() {
+        document.getElementById('score-p1').innerText = p1Punti;
+        document.getElementById('score-cpu').innerText = cpuPunti;
+        document.getElementById('txt-p1').innerText = miaSquadra;
+        document.getElementById('txt-cpu').innerText = avversario;
+        document.getElementById('turno-label').innerText = oltranza ? "OLTRANZA" : `Tiro ${roundAttuale}/3`;
+    }
+
+    function mostraSchermo(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+</script>
+</body>
+</html>
