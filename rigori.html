@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CALCI DI RIGORE</title>
     <style>
         :root {
@@ -10,6 +10,7 @@
             --azzurri: #3498db;
             --verdi: #2ecc71;
             --gialli: #f1c40f;
+            --gold: #d4af37;
         }
 
         body {
@@ -18,65 +19,79 @@
             color: white;
             text-align: center;
             margin: 0;
-            overflow-x: hidden;
+            padding: 0;
+            overflow: hidden; /* Evita lo scroll per far stare tutto in una schermata */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         #game-wrapper {
+            flex: 1;
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
-        .screen { display: none; }
-        .active { display: block; animation: fadeIn 0.4s; }
+        h1 {
+            font-size: clamp(18px, 4vh, 32px);
+            margin: 5px 0;
+        }
+
+        .screen { display: none; width: 100%; }
+        .active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.4s; }
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Scelta Contrada */
+        /* Griglia Scelta Contrada - Ridimensionata */
         .grid-contrade {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 10px;
+            width: 90%;
         }
 
         .btn-c {
-            padding: 40px 20px;
-            font-size: 24px;
+            padding: clamp(15px, 5vh, 40px) 10px;
+            font-size: clamp(16px, 3vh, 24px);
             font-weight: bold;
-            border: 4px solid white;
-            border-radius: 15px;
+            border: 3px solid white;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
             text-transform: uppercase;
         }
-        .btn-c:hover { transform: scale(1.05); }
         .b-rossi { background-color: var(--rossi); color: white; }
         .b-azzurri { background-color: var(--azzurri); color: white; }
         .b-verdi { background-color: var(--verdi); color: white; }
         .b-gialli { background-color: var(--gialli); color: black; }
 
-        /* Campo da gioco */
+        /* Campo da gioco scalabile */
         #stadium {
             position: relative;
             width: 100%;
-            height: 450px;
+            height: clamp(250px, 45vh, 450px);
             background: linear-gradient(to bottom, #2ecc71 50%, #27ae60 50%);
-            background-size: 100% 80px;
-            border: 4px solid white;
+            background-size: 100% 40px;
+            border: 3px solid white;
             border-radius: 10px;
-            margin: 20px 0;
+            margin: 10px 0;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         #goal {
             position: absolute;
-            top: 20px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             width: 70%;
-            height: 160px;
-            border: 8px solid white;
+            height: 35%;
+            border: 6px solid white;
             border-bottom: none;
             background: rgba(255,255,255,0.1);
             z-index: 1;
@@ -84,103 +99,115 @@
 
         /* Figure stilizzate */
         .figure { position: absolute; transition: all 0.5s ease; z-index: 5; }
-        .head { width: 22px; height: 22px; background: #ffdbac; border-radius: 50%; margin: 0 auto; }
-        .torso { width: 35px; height: 45px; border-radius: 5px; margin-top: -2px; border: 3px solid black; } 
+        .head { width: 18px; height: 18px; background: #ffdbac; border-radius: 50%; margin: 0 auto; }
+        .torso { width: 30px; height: 38px; border-radius: 4px; margin-top: -2px; border: 2px solid black; } 
         
-        .portiere { top: 100px; left: 50%; transform: translateX(-50%); }
-        .tiratore { bottom: 30px; left: 50%; transform: translateX(-50%); }
-        
-        /* Animazione movimento tiratore */
+        .portiere { top: 20%; left: 50%; transform: translateX(-50%); }
+        .tiratore { bottom: 10%; left: 50%; transform: translateX(-50%); }
         .calcia { transform: translateX(-50%) translateY(-20px) scale(1.1); }
 
-        /* Palla a SCACCHI */
         .palla {
             position: absolute;
-            bottom: 60px;
+            bottom: 20%;
             left: 50%;
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             background-color: #fff;
-            background-image: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 12px 12px;
+            background-image: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 8px 8px;
             border-radius: 50%;
             transform: translateX(-50%);
             transition: all 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);
             z-index: 10;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
 
         /* Traiettorie */
-        .tira-sx { bottom: 280px; left: 22%; transform: scale(0.6); }
-        .tira-centro { bottom: 320px; left: 50%; transform: scale(0.6); }
-        .tira-dx { bottom: 280px; left: 78%; transform: scale(0.6); }
+        .tira-sx { bottom: 65%; left: 22%; transform: scale(0.6); }
+        .tira-centro { bottom: 75%; left: 50%; transform: scale(0.6); }
+        .tira-dx { bottom: 65%; left: 78%; transform: scale(0.6); }
 
-        .tuffo-sx { left: 25% !important; top: 130px; transform: rotate(-45deg); }
-        .tuffo-dx { left: 75% !important; top: 130px; transform: rotate(45deg); }
-        
-        /* Messaggio di rotazione obbligatoria */
-        #rotate-message {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #1a1a1a;
-            color: var(--gold);
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-family: 'Cinzel', serif;
-        }
+        .tuffo-sx { left: 25% !important; top: 30%; transform: rotate(-45deg); }
+        .tuffo-dx { left: 75% !important; top: 30%; transform: rotate(45deg); }
 
-        @media screen and (orientation: portrait) {
-            #rotate-message { display: flex; }
-            .container, h1, .btn-home { display: none; }
-        }
-
-        /* UI */
+        /* UI e Controlli */
         .stats {
             display: flex;
             justify-content: space-around;
             background: #000;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 20px;
-            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
         }
-        .msg { font-size: 22px; color: #f1c40f; margin: 10px; min-height: 30px; }
+        .msg { font-size: 18px; color: #f1c40f; margin: 5px; min-height: 24px; }
         
+        .controls p { margin: 5px 0; font-size: 14px; }
         .controls button {
-            padding: 15px 25px;
-            font-size: 18px;
-            margin: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            margin: 2px;
             cursor: pointer;
             background: #444;
             color: white;
             border: none;
             border-radius: 5px;
         }
-        .controls button:hover { background: #666; }
 
         .btn-azione {
-            padding: 15px 30px;
+            padding: 12px 25px;
             background: #27ae60;
-            color: white;
+            font-size: 18px;
+            border-radius: 25px;
             border: none;
-            border-radius: 30px;
-            font-size: 20px;
+            color: white;
             cursor: pointer;
-            margin-top: 20px;
+        }
+
+        /* Pulsante Home Fisso in Fondo */
+        .footer-nav {
+            padding: 15px;
+            background: #1a1a1a;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .back-home {
+            display: block;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid var(--gold);
+            padding: 8px;
+            border-radius: 5px;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        /* Blocco Rotazione */
+        #rotate-message {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #1a1a1a;
+            color: var(--f1c40f);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (orientation: portrait) and (max-width: 600px) {
+            #rotate-message { display: flex; }
         }
     </style>
 </head>
 <body>
 
 <div id="rotate-message">
-        <div style="font-size: 50px;">🔄</div>
-        <h2>RUOTA IL DISPOSITIVO</h2>
-        <p>Il Torneo dei Destrieri richiede la visuale panoramica per una corsa epica!</p>
-    </div>
+    <div style="font-size: 50px;">🔄</div>
+    <h2>RUOTA IL DISPOSITIVO</h2>
+    <p>Il gioco richiede lo schermo in orizzontale</p>
+</div>
 
 <div id="game-wrapper">
     <h1>🏆⚽ CALCI DI RIGORE ⚽🏆</h1>
@@ -197,7 +224,7 @@
 
     <div id="scr-bracket" class="screen">
         <h2 id="fase-torneo">Semifinali</h2>
-        <div id="info-scontri" style="font-size: 24px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;"></div>
+        <div id="info-scontri" style="font-size: 18px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;"></div>
         <button class="btn-azione" onclick="vaiAlCampo()">Entra in Campo</button>
     </div>
 
@@ -212,17 +239,14 @@
 
         <div id="stadium">
             <div id="goal"></div>
-            
             <div id="portiere" class="figure portiere">
                 <div class="head"></div>
                 <div id="maglia-portiere" class="torso"></div>
             </div>
-
             <div id="tiratore" class="figure tiratore">
                 <div class="head"></div>
                 <div id="maglia-tiratore" class="torso"></div>
             </div>
-
             <div id="palla" class="palla"></div>
         </div>
 
@@ -243,9 +267,13 @@
 
     <div id="scr-result" class="screen">
         <h2 id="risultato-titolo">FINE PARTITA</h2>
-        <p id="risultato-testo" style="font-size: 20px;"></p>
+        <p id="risultato-testo" style="font-size: 18px;"></p>
         <button id="btn-prosegui" class="btn-azione" onclick="proseguiTorneo()">Continua</button>
     </div>
+</div>
+
+<div class="footer-nav">
+    <a href="index.html" class="back-home">← TORNA ALLA HOME</a>
 </div>
 
 <script>
@@ -268,7 +296,7 @@
         } else {
             avversario = (mischiate[2] === miaSquadra) ? mischiate[3] : mischiate[2];
         }
-        document.getElementById('info-scontri').innerHTML = `Semifinale: <b>${miaSquadra}</b> vs <b>${avversario}</b>`;
+        document.getElementById('info-scontri').innerHTML = `Sfida: <b>${miaSquadra}</b> vs <b>${avversario}</b>`;
     }
 
     function vaiAlCampo() {
@@ -280,7 +308,6 @@
 
     function setupAttackTurn() {
         resetPosizioniBase();
-        // Attacco: Io calcio (mio colore), CPU para (colore avversario)
         document.getElementById('maglia-tiratore').style.backgroundColor = mioColore;
         document.getElementById('maglia-portiere').style.backgroundColor = teamColors[avversario];
         document.getElementById('ctrl-attacco').style.display = "block";
@@ -290,12 +317,11 @@
 
     function setupDefenseTurn() {
         resetPosizioniBase();
-        // Difesa: CPU calcia (colore avversario), Io paro (mio colore)
         document.getElementById('maglia-tiratore').style.backgroundColor = teamColors[avversario];
         document.getElementById('maglia-portiere').style.backgroundColor = mioColore;
         document.getElementById('ctrl-attacco').style.display = "none";
         document.getElementById('ctrl-difesa').style.display = "block";
-        document.getElementById('feedback').innerText = "Tira l'avversario! Difendi la porta!";
+        document.getElementById('feedback').innerText = "Tira l'avversario! Para!";
     }
 
     function resetPosizioniBase() {
@@ -307,14 +333,10 @@
     function azioneGiocatore(lato) {
         document.getElementById('ctrl-attacco').style.display = "none";
         let tuffoCpu = ['sx', 'centro', 'dx'][Math.floor(Math.random() * 3)];
-        
-        // Animazione Calcio
         document.getElementById('tiratore').classList.add('calcia');
-        
         setTimeout(() => {
             document.getElementById('palla').classList.add('tira-' + lato);
             if (tuffoCpu !== 'centro') document.getElementById('portiere').classList.add('tuffo-' + tuffoCpu);
-            
             setTimeout(() => {
                 if (lato === tuffoCpu) document.getElementById('feedback').innerText = "PARATA! ❌";
                 else { document.getElementById('feedback').innerText = "GOOOOL! ⚽"; p1Punti++; }
@@ -327,14 +349,10 @@
     function difesaGiocatore(latoPortiere) {
         document.getElementById('ctrl-difesa').style.display = "none";
         let tiroCpu = ['sx', 'centro', 'dx'][Math.floor(Math.random() * 3)];
-
-        // Il giocatore CPU si muove per calciare
         document.getElementById('tiratore').classList.add('calcia');
-
         setTimeout(() => {
             document.getElementById('palla').classList.add('tira-' + tiroCpu);
             if (latoPortiere !== 'centro') document.getElementById('portiere').classList.add('tuffo-' + latoPortiere);
-
             setTimeout(() => {
                 if (latoPortiere === tiroCpu) document.getElementById('feedback').innerText = "PARATA! 🧤";
                 else { document.getElementById('feedback').innerText = "GOL... 🥅"; cpuPunti++; }

@@ -349,15 +349,26 @@
     </div>
 </section>
 
-<section id="lotteria-premi" style="text-align: center; padding: 50px 20px; background: rgba(212, 175, 55, 0.05); border-radius: 20px; margin: 40px auto; max-width: 900px; border: 2px solid #d4af37;">
-    <h2 style="color: #d4af37; margin-bottom: 10px;">🎁 Grande Lotteria del Palio delle Contrade 2026</h2>
-    <p style="margin-bottom: 25px;"> Scopri i fantastici premi in palio per quest'anno...</p>
-    
-    <a href="premi.html" style="display: inline-block; background: #d4af37; color: black; padding: 18px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: 0.3s; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); border: 2px solid transparent;">
-        🔍 CLICCA QUI PER SCOPRIRE I PREMI
-    </a>
-    
-    <p style="margin-top: 20px; font-style: italic; font-size: 0.9rem; color: #555;">L'estrazione avverrà durante la cena di gala della Contrada vincitrice.</p>
+<section id="lotteria-premi" style="text-align: center; padding: 20px 0;">
+    <h2 style="color: #d4af37;">🎁 GRANDE LOTTERIA DEL PALIO DELLE CONTRADE 2026</h2>
+    <p style="text-align: center; color: #aaa; margin-bottom: 20px;">
+        Scopri i fantastici premi in palio per quest'anno e tenta la fortuna!
+    </p>
+
+    <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; border: 1px solid #d4af37; max-width: 600px; margin: 0 auto; text-align: center;">
+        <div style="margin-bottom: 25px;">
+            <p style="font-size: 1.1rem; color: white;">Sfoglia l'elenco completo dei premi, dal primo al ventesimo posto:</p>
+        </div>
+
+        <a href="premi.html" 
+           style="display: inline-block; background: #d4af37; color: black; padding: 18px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(212,175,55,0.4);">
+           🔍 CLICCA QUI PER SCOPRIRE I PREMI
+        </a>
+
+        <p style="margin-top: 20px; font-size: 0.85rem; color: #777;">
+            L'estrazione ufficiale avverrà durante la serata finale del Palio 2026.
+        </p>
+    </div>
 </section>
 
 <section id="gioca-al-palio" style="text-align: center; padding: 50px 20px; background: rgba(212, 175, 55, 0.1); border-radius: 20px; margin: 40px auto; max-width: 900px; border: 2px dashed var(--gold);">
@@ -391,13 +402,37 @@
     </div>
 </section>
 
+<style>
+    /* Nasconde il testo sui dispositivi con schermo piccolo (meno di 600px) */
+    @media (max-width: 600px) {
+        .social-text {
+            display: none;
+        }
+        .social-link {
+            font-size: 2.5rem; /* Ingrandisce un po' le icone su mobile per facilitare il tocco */
+        }
+    }
+</style>
+
 <footer id="contatti" style="background: #000; padding: 50px 20px; text-align: center; border-top: 2px solid var(--gold);">
     <h2 style="color: var(--gold); margin-bottom: 30px;">📱 SEGUICI SUI SOCIAL</h2>
-    <div style="display: flex; justify-content: center; gap: 30px; font-size: 2rem;">
-        <a href="https://www.instagram.com/casazza_oratorio/" target="_blank" style="color: #E1306C; text-decoration: none;"><i class="fab fa-instagram"></i> Instagram</a>
-        <a href="https://www.facebook.com/groups/casazzaoratorio/" target="_blank" style="color: #4267B2; text-decoration: none;"><i class="fab fa-facebook"></i> Facebook</a>
-        <a href="https://www.youtube.com/@parrocchiamariamadredellac4674" target="_blank" style="color: #FF0000; text-decoration: none;"><i class="fab fa-youtube"></i> YouTube</a>
+    
+    <div style="display: flex; justify-content: center; gap: 30px; align-items: center;">
+        
+        <a href="https://www.instagram.com/casazza_oratorio/" target="_blank" class="social-link" style="color: #E1306C; text-decoration: none; font-size: 2rem;">
+            <i class="fab fa-instagram"></i> <span class="social-text" style="font-size: 1.2rem; margin-left: 5px;">Instagram</span>
+        </a>
+
+        <a href="https://www.facebook.com/groups/casazzaoratorio/" target="_blank" class="social-link" style="color: #4267B2; text-decoration: none; font-size: 2rem;">
+            <i class="fab fa-facebook"></i> <span class="social-text" style="font-size: 1.2rem; margin-left: 5px;">Facebook</span>
+        </a>
+
+        <a href="https://www.youtube.com/@parrocchiamariamadredellac4674" target="_blank" class="social-link" style="color: #FF0000; text-decoration: none; font-size: 2rem;">
+            <i class="fab fa-youtube"></i> <span class="social-text" style="font-size: 1.2rem; margin-left: 5px;">YouTube</span>
+        </a>
+
     </div>
+
     <p style="margin-top: 40px; color: #555;">&copy; 2026 Palio delle Contrade. Tutti i diritti riservati.</p>
 </footer>
 
