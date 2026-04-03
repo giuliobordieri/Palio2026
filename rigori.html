@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CALCI DI RIGORE</title>
     <style>
         :root {
@@ -20,260 +20,248 @@
             text-align: center;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Evita lo scroll per far stare tutto in una schermata */
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            /* Permettiamo lo scroll verticale */
+            overflow-y: auto; 
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        #game-wrapper {
-            flex: 1;
+        /* Contenitore principale che mantiene le proporzioni */
+        #game-outer-container {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 10px;
+            padding-bottom: 80px; /* Spazio per il tasto home in fondo */
+        }
+
+        /* Sistema di rimpicciolimento per mobile */
+        @media screen and (max-width: 600px) {
+            #game-wrapper {
+                transform: scale(0.9); /* Rimpicciolisce tutto il blocco gioco */
+                transform-origin: top center;
+                margin-bottom: -50px; /* Recupera lo spazio vuoto creato dallo scale */
+            }
+        }
+
+        #game-wrapper {
+            padding: 15px;
             box-sizing: border-box;
         }
 
         h1 {
-            font-size: clamp(18px, 4vh, 32px);
-            margin: 5px 0;
+            font-size: 28px;
+            margin: 15px 0;
+            text-shadow: 2px 2px 0 #000;
         }
 
-        .screen { display: none; width: 100%; }
-        .active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.4s; }
-        
+        .screen { display: none; }
+        .active { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Griglia Scelta Contrada - Ridimensionata */
+        /* Griglia Scelta Contrada */
         .grid-contrade {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 90%;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .btn-c {
-            padding: clamp(15px, 5vh, 40px) 10px;
-            font-size: clamp(16px, 3vh, 24px);
+            padding: 30px 10px;
+            font-size: 20px;
             font-weight: bold;
-            border: 3px solid white;
-            border-radius: 12px;
+            border: 4px solid white;
+            border-radius: 15px;
             cursor: pointer;
             text-transform: uppercase;
+            transition: transform 0.2s;
         }
+        .btn-c:active { transform: scale(0.95); }
+
         .b-rossi { background-color: var(--rossi); color: white; }
         .b-azzurri { background-color: var(--azzurri); color: white; }
         .b-verdi { background-color: var(--verdi); color: white; }
         .b-gialli { background-color: var(--gialli); color: black; }
 
-        /* Campo da gioco scalabile */
+        /* Campo da gioco PROPORZIONALE */
         #stadium {
             position: relative;
             width: 100%;
-            height: clamp(250px, 45vh, 450px);
+            aspect-ratio: 16 / 10; /* Mantiene sempre la stessa forma */
             background: linear-gradient(to bottom, #2ecc71 50%, #27ae60 50%);
-            background-size: 100% 40px;
-            border: 3px solid white;
-            border-radius: 10px;
-            margin: 10px 0;
+            background-size: 100% 15%;
+            border: 4px solid white;
+            border-radius: 12px;
+            margin: 20px 0;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         #goal {
             position: absolute;
-            top: 10px;
+            top: 5%;
             left: 50%;
             transform: translateX(-50%);
             width: 70%;
-            height: 35%;
-            border: 6px solid white;
+            height: 40%;
+            border: 8px solid white;
             border-bottom: none;
             background: rgba(255,255,255,0.1);
             z-index: 1;
         }
 
-        /* Figure stilizzate */
+        /* Giocatori e Palla */
         .figure { position: absolute; transition: all 0.5s ease; z-index: 5; }
-        .head { width: 18px; height: 18px; background: #ffdbac; border-radius: 50%; margin: 0 auto; }
-        .torso { width: 30px; height: 38px; border-radius: 4px; margin-top: -2px; border: 2px solid black; } 
+        .head { width: 20px; height: 20px; background: #ffdbac; border-radius: 50%; margin: 0 auto; }
+        .torso { width: 32px; height: 42px; border-radius: 5px; margin-top: -2px; border: 3px solid black; } 
         
-        .portiere { top: 20%; left: 50%; transform: translateX(-50%); }
-        .tiratore { bottom: 10%; left: 50%; transform: translateX(-50%); }
-        .calcia { transform: translateX(-50%) translateY(-20px) scale(1.1); }
+        .portiere { top: 25%; left: 50%; transform: translateX(-50%); }
+        .tiratore { bottom: 5%; left: 50%; transform: translateX(-50%); }
+        .calcia { transform: translateX(-50%) translateY(-15px) scale(1.1); }
 
         .palla {
             position: absolute;
-            bottom: 20%;
+            bottom: 15%;
             left: 50%;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             background-color: #fff;
-            background-image: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 8px 8px;
+            background-image: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 10px 10px;
             border-radius: 50%;
             transform: translateX(-50%);
             transition: all 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);
             z-index: 10;
         }
 
-        /* Traiettorie */
-        .tira-sx { bottom: 65%; left: 22%; transform: scale(0.6); }
-        .tira-centro { bottom: 75%; left: 50%; transform: scale(0.6); }
-        .tira-dx { bottom: 65%; left: 78%; transform: scale(0.6); }
+        .tira-sx { bottom: 65%; left: 22%; transform: scale(0.6) rotate(360deg); }
+        .tira-centro { bottom: 75%; left: 50%; transform: scale(0.6) rotate(360deg); }
+        .tira-dx { bottom: 65%; left: 78%; transform: scale(0.6) rotate(360deg); }
 
-        .tuffo-sx { left: 25% !important; top: 30%; transform: rotate(-45deg); }
-        .tuffo-dx { left: 75% !important; top: 30%; transform: rotate(45deg); }
+        .tuffo-sx { left: 25% !important; top: 35%; transform: rotate(-45deg); }
+        .tuffo-dx { left: 75% !important; top: 35%; transform: rotate(45deg); }
 
-        /* UI e Controlli */
+        /* Interfaccia */
         .stats {
             display: flex;
             justify-content: space-around;
             background: #000;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 16px;
-            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 18px;
         }
-        .msg { font-size: 18px; color: #f1c40f; margin: 5px; min-height: 24px; }
+        .msg { font-size: 20px; color: #f1c40f; margin: 15px 0; min-height: 25px; }
         
-        .controls p { margin: 5px 0; font-size: 14px; }
         .controls button {
-            padding: 10px 15px;
-            font-size: 14px;
-            margin: 2px;
+            padding: 12px 20px;
+            font-size: 16px;
+            margin: 5px;
             cursor: pointer;
             background: #444;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-family: 'Arial Black', sans-serif;
         }
 
         .btn-azione {
-            padding: 12px 25px;
+            padding: 15px 35px;
             background: #27ae60;
-            font-size: 18px;
-            border-radius: 25px;
-            border: none;
             color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 20px;
             cursor: pointer;
         }
 
-        /* Pulsante Home Fisso in Fondo */
-        .footer-nav {
-            padding: 15px;
-            background: #1a1a1a;
-            width: 100%;
-            box-sizing: border-box;
+        /* Pulsante Home a fine pagina */
+        .home-container {
+            margin: 40px 0;
+            padding-bottom: 20px;
         }
+
         .back-home {
-            display: block;
+            display: inline-block;
             color: var(--gold);
             text-decoration: none;
             font-weight: bold;
-            font-size: 14px;
-            border: 1px solid var(--gold);
-            padding: 8px;
-            border-radius: 5px;
-            width: fit-content;
-            margin: 0 auto;
+            border: 2px solid var(--gold);
+            padding: 12px 25px;
+            border-radius: 50px;
+            transition: 0.3s;
         }
-
-        /* Blocco Rotazione */
-        #rotate-message {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #1a1a1a;
-            color: var(--f1c40f);
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        @media screen and (orientation: portrait) and (max-width: 600px) {
-            #rotate-message { display: flex; }
-        }
+        .back-home:hover { background: var(--gold); color: black; }
     </style>
 </head>
 <body>
 
-<div id="rotate-message">
-    <div style="font-size: 50px;">🔄</div>
-    <h2>RUOTA IL DISPOSITIVO</h2>
-    <p>Il gioco richiede lo schermo in orizzontale</p>
-</div>
+<div id="game-outer-container">
+    <div id="game-wrapper">
+        <h1>🏆⚽ CALCI DI RIGORE ⚽🏆</h1>
 
-<div id="game-wrapper">
-    <h1>🏆⚽ CALCI DI RIGORE ⚽🏆</h1>
-
-    <div id="scr-select" class="screen active">
-        <h2>Scegli la tua Contrada</h2>
-        <div class="grid-contrade">
-            <button class="btn-c b-rossi" onclick="scegliSquadra('Rossi')">Rossi</button>
-            <button class="btn-c b-azzurri" onclick="scegliSquadra('Azzurri')">Azzurri</button>
-            <button class="btn-c b-verdi" onclick="scegliSquadra('Verdi')">Verdi</button>
-            <button class="btn-c b-gialli" onclick="scegliSquadra('Gialli')">Gialli</button>
-        </div>
-    </div>
-
-    <div id="scr-bracket" class="screen">
-        <h2 id="fase-torneo">Semifinali</h2>
-        <div id="info-scontri" style="font-size: 18px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px;"></div>
-        <button class="btn-azione" onclick="vaiAlCampo()">Entra in Campo</button>
-    </div>
-
-    <div id="scr-match" class="screen">
-        <div class="stats">
-            <div><span id="txt-p1">TU</span>: <b id="score-p1">0</b></div>
-            <div id="turno-label">Tiro 1/3</div>
-            <div><span id="txt-cpu">CPU</span>: <b id="score-cpu">0</b></div>
-        </div>
-
-        <div id="feedback" class="msg">Preparati!</div>
-
-        <div id="stadium">
-            <div id="goal"></div>
-            <div id="portiere" class="figure portiere">
-                <div class="head"></div>
-                <div id="maglia-portiere" class="torso"></div>
+        <div id="scr-select" class="screen active">
+            <h2>Scegli la tua Contrada</h2>
+            <div class="grid-contrade">
+                <button class="btn-c b-rossi" onclick="scegliSquadra('Rossi')">Rossi</button>
+                <button class="btn-c b-azzurri" onclick="scegliSquadra('Azzurri')">Azzurri</button>
+                <button class="btn-c b-verdi" onclick="scegliSquadra('Verdi')">Verdi</button>
+                <button class="btn-c b-gialli" onclick="scegliSquadra('Gialli')">Gialli</button>
             </div>
-            <div id="tiratore" class="figure tiratore">
-                <div class="head"></div>
-                <div id="maglia-tiratore" class="torso"></div>
+        </div>
+
+        <div id="scr-bracket" class="screen">
+            <h2 id="fase-torneo">Semifinali</h2>
+            <div id="info-scontri" style="font-size: 22px; background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px;"></div>
+            <br>
+            <button class="btn-azione" onclick="vaiAlCampo()">Entra in Campo</button>
+        </div>
+
+        <div id="scr-match" class="screen">
+            <div class="stats">
+                <div><span id="txt-p1">TU</span>: <b id="score-p1">0</b></div>
+                <div id="turno-label">Tiro 1/3</div>
+                <div><span id="txt-cpu">CPU</span>: <b id="score-cpu">0</b></div>
             </div>
-            <div id="palla" class="palla"></div>
+
+            <div id="feedback" class="msg">Preparati!</div>
+
+            <div id="stadium">
+                <div id="goal"></div>
+                <div id="portiere" class="figure portiere">
+                    <div class="head"></div>
+                    <div id="maglia-portiere" class="torso"></div>
+                </div>
+                <div id="tiratore" class="figure tiratore">
+                    <div class="head"></div>
+                    <div id="maglia-tiratore" class="torso"></div>
+                </div>
+                <div id="palla" class="palla"></div>
+            </div>
+
+            <div id="ctrl-attacco" class="controls">
+                <p>DOVE TIRI?</p>
+                <button onclick="azioneGiocatore('sx')">SINISTRA</button>
+                <button onclick="azioneGiocatore('centro')">CENTRO</button>
+                <button onclick="azioneGiocatore('dx')">DESTRA</button>
+            </div>
+
+            <div id="ctrl-difesa" class="controls" style="display:none;">
+                <p>DOVE TI TUFFI?</p>
+                <button onclick="difesaGiocatore('sx')">SINISTRA</button>
+                <button onclick="difesaGiocatore('centro')">CENTRO</button>
+                <button onclick="difesaGiocatore('dx')">DESTRA</button>
+            </div>
         </div>
 
-        <div id="ctrl-attacco" class="controls">
-            <p>DOVE TIRI?</p>
-            <button onclick="azioneGiocatore('sx')">SINISTRA</button>
-            <button onclick="azioneGiocatore('centro')">CENTRO</button>
-            <button onclick="azioneGiocatore('dx')">DESTRA</button>
-        </div>
-
-        <div id="ctrl-difesa" class="controls" style="display:none;">
-            <p>DOVE TI TUFFI?</p>
-            <button onclick="difesaGiocatore('sx')">SINISTRA</button>
-            <button onclick="difesaGiocatore('centro')">CENTRO</button>
-            <button onclick="difesaGiocatore('dx')">DESTRA</button>
+        <div id="scr-result" class="screen">
+            <h2 id="risultato-titolo">FINE PARTITA</h2>
+            <p id="risultato-testo" style="font-size: 22px; margin: 20px 0;"></p>
+            <button id="btn-prosegui" class="btn-azione" onclick="proseguiTorneo()">Continua</button>
         </div>
     </div>
 
-    <div id="scr-result" class="screen">
-        <h2 id="risultato-titolo">FINE PARTITA</h2>
-        <p id="risultato-testo" style="font-size: 18px;"></p>
-        <button id="btn-prosegui" class="btn-azione" onclick="proseguiTorneo()">Continua</button>
+    <div class="home-container">
+        <a href="index.html" class="back-home">⬅️ RITORNA ALLA HOME</a>
     </div>
-</div>
-
-<div class="footer-nav">
-    <a href="index.html" class="back-home">← TORNA ALLA HOME</a>
 </div>
 
 <script>
@@ -296,7 +284,7 @@
         } else {
             avversario = (mischiate[2] === miaSquadra) ? mischiate[3] : mischiate[2];
         }
-        document.getElementById('info-scontri').innerHTML = `Sfida: <b>${miaSquadra}</b> vs <b>${avversario}</b>`;
+        document.getElementById('info-scontri').innerHTML = `Sfida Semifinale:<br><b>${miaSquadra}</b> vs <b>${avversario}</b>`;
     }
 
     function vaiAlCampo() {
@@ -378,17 +366,18 @@
     function finePartita() {
         mostraSchermo('scr-result');
         let vinto = p1Punti > cpuPunti;
-        document.getElementById('risultato-testo').innerText = `Punteggio finale: ${p1Punti} - ${cpuPunti}`;
+        document.getElementById('risultato-testo').innerText = `Risultato: ${p1Punti} - ${cpuPunti}`;
         if (vinto) {
             if (fase === "semi") {
-                document.getElementById('risultato-titolo').innerText = "SEI IN FINALE! 🎉";
+                document.getElementById('risultato-titolo').innerText = "VITTORIA! SEI IN FINALE 🎉";
                 document.getElementById('btn-prosegui').innerText = "Vai alla Finale";
             } else {
-                document.getElementById('risultato-titolo').innerText = "CAMPIONE! 🏆";
+                document.getElementById('risultato-titolo').innerText = "CAMPIONE DEL TORNEO! 🏆";
                 document.getElementById('btn-prosegui').onclick = () => location.reload();
             }
         } else {
-            document.getElementById('risultato-titolo').innerText = "HAI PERSO... 😢";
+            document.getElementById('risultato-titolo').innerText = "ELIMINATO... 😢";
+            document.getElementById('btn-prosegui').innerText = "Riprova Torneo";
             document.getElementById('btn-prosegui').onclick = () => location.reload();
         }
     }
@@ -399,7 +388,7 @@
             let rimanenti = nomiSquadre.filter(s => s !== miaSquadra && s !== avversario);
             avversario = rimanenti[Math.floor(Math.random() * rimanenti.length)];
             document.getElementById('fase-torneo').innerText = "FINALISSIMA";
-            document.getElementById('info-scontri').innerHTML = `FINALE: <b>${miaSquadra}</b> vs <b>${avversario}</b>`;
+            document.getElementById('info-scontri').innerHTML = `Grande Finale:<br><b>${miaSquadra}</b> vs <b>${avversario}</b>`;
             mostraSchermo('scr-bracket');
         }
     }
@@ -415,6 +404,7 @@
     function mostraSchermo(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        window.scrollTo(0, 0); // Torna in cima al cambio schermata
     }
 </script>
 </body>
