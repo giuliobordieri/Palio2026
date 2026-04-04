@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crea il logo</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #ff4d4d, #4dff88, #4d94ff, #fff24d);
+            background-attachment: fixed;
+            margin: 0; padding: 10px; color: white; text-align: center;
+            height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            overflow: hidden; /* Evita lo scroll della pagina intera */
+        }
+        .container { max-width: 400px; margin: 0 auto; width: 100%; }
+        
+        h1 { margin: 0 0 5px 0; font-size: 1.2rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+
+        #canvas-container { 
+            background: rgba(255,255,255,0.15);
+            padding: 10px; border-radius: 15px;
+            margin-bottom: 10px; display: flex; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        canvas { 
+            max-width: 180px; /* Dimensioni ridotte per stare in una schermata */
+            height: auto; 
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        }
+
+        .controls { 
+            background: rgba(0, 0, 0, 0.85); 
+            padding: 15px; border-radius: 15px; 
+            display: grid; grid-template-columns: 1fr 1fr; /* Due colonne per risparmiare spazio */
+            gap: 8px; text-align: left;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+        
+        .control-group { display: flex; flex-direction: column; }
+        label { font-size: 0.65rem; text-transform: uppercase; color: #ffcc00; font-weight: bold; margin-bottom: 2px; }
+        select { padding: 8px; border-radius: 8px; border: none; font-size: 0.85rem; background: #fff; color: #000; }
+        
+        .btn-save { 
+            grid-column: span 2; /* Il tasto salva occupa tutta la riga */
+            background: #27ae60; color: white; font-weight: bold; 
+            padding: 12px; border-radius: 10px; border: none; cursor: pointer;
+            margin-top: 5px; font-size: 1rem;
+        }
+
+        .btn-home { 
+            grid-column: span 2;
+            color: white; text-decoration: none; font-size: 0.8rem; 
+            opacity: 0.8; margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🛡️ CREA IL TUO LOGO</h1>
+    
+    <div id="canvas-container">
+        <canvas id="shieldCanvas" width="400" height="500"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Contrada</label>
+            <select id="colorSelect">
+		    <option value="#ff4d4d">🔴 ROSSI</option>
+		    <option value="#4d94ff">🔵 AZZURRI</option>
+		    <option value="#4dff4d">🟢 VERDI</option>
+		    <option value="#ffff4d">🟡 GIALLI</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Forma</label>
+            <select id="shapeSelect">
+                <option value="classic">Classica</option>
+                <option value="square">Squadrata</option>
+                <option value="circle">Tonda</option>
+                <option value="pointed">Guerriero</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Trama</label>
+            <select id="tramaSelect">
+                <option value="plain">Unita</option>
+                <option value="check">Scacchi</option>
+                <option value="stripesV">Verticale</option>
+                <option value="stripesH">Orizzontale</option>
+                <option value="diagonal">Diagonale</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Simbolo</label>
+            <select id="iconSelect">
+                    <option value="🦁">Leone</option>
+		    <option value="🦅">Aquila</option>
+		    <option value="🐍">Serpente</option>
+		    <option value="🐺">Lupo</option>
+		    <option value="👑">Corona</option>
+		    <option value="🏹">Arco</option>
+		    <option value="🛡️">Scudo nel logo</option>
+		    <option value="🐉">Drago</option>
+		    <option value="🔥">Fuoco</option>
+		    <option value="⚡">Fulmine</option>
+		    <option value="⚔️">Spade</option>
+		    <option value="☀️">Sole</option>
+            </select>
+        </div>
+
+        <button class="btn-save" onclick="downloadShield()">📥 SCARICA PNG</button>
+        <a href="index.html" class="btn-home">🏠 Torna alla Home</a>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('shieldCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function draw() {
+        const color = document.getElementById('colorSelect').value;
+        const shape = document.getElementById('shapeSelect').value;
+        const trama = document.getElementById('tramaSelect').value;
+        const icon = document.getElementById('iconSelect').value;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.save();
+        ctx.beginPath();
+        if (shape === 'classic') {
+            ctx.moveTo(50, 20); ctx.lineTo(350, 20); ctx.lineTo(350, 300);
+            ctx.bezierCurveTo(350, 450, 50, 450, 50, 300); ctx.closePath();
+        } else if (shape === 'square') {
+            ctx.roundRect(50, 50, 300, 350, 20);
+        } else if (shape === 'circle') {
+            ctx.arc(200, 250, 180, 0, Math.PI * 2);
+        } else if (shape === 'pointed') {
+            ctx.moveTo(50, 50); ctx.lineTo(350, 50); ctx.lineTo(350, 350);
+            ctx.lineTo(200, 450); ctx.lineTo(50, 350); ctx.closePath();
+        }
+        ctx.clip();
+
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "white";
+        if (trama === 'check') {
+            for(let i=0; i<10; i++) for(let j=0; j<12; j++) {
+                if((i+j)%2==0) ctx.fillRect(i*50, j*50, 50, 50);
+            }
+        } else if (trama === 'stripesV') {
+            for(let i=0; i<10; i+=2) ctx.fillRect(i*50, 0, 50, canvas.height);
+        } else if (trama === 'stripesH') {
+            for(let i=0; i<12; i+=2) ctx.fillRect(0, i*50, canvas.width, 50);
+        } else if (trama === 'diagonal') {
+            ctx.translate(200,250); ctx.rotate(45 * Math.PI / 180);
+            for(let i=-20; i<20; i+=2) ctx.fillRect(i*40, -600, 40, 1200);
+        }
+        ctx.restore();
+
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.font = "180px serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(icon, 200, 255);
+        
+    }
+
+    function downloadShield() {
+        const link = document.createElement('a');
+        link.download = 'stemma-palio.png';
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    }
+
+    document.querySelectorAll('select').forEach(s => s.addEventListener('change', draw));
+    window.onload = draw;
+</script>
+
+</body>
+</html>
