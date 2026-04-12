@@ -194,11 +194,11 @@
             </div>
 
             <div class="total-box">
-                Totale da pagare: <span id="prezzo-finale">7</span>€
+                Totale da pagare: <span id="prezzo-finale">10</span>€
             </div>
         </div>
 
-        <p style="font-size: 0.9rem;">Il costo è di 7€ per ogni maglietta prenotata.</p>
+        <p style="font-size: 0.9rem;">Il costo è di 10€ per ogni maglietta prenotata.</p>
         
         <div class="actions">
             <button onclick="window.print()" class="btn">🖨️ Stampa Ricevuta</button>
@@ -211,7 +211,7 @@
     <script>
         function calcolaTotale() {
             const qta = document.getElementById('quantita').value;
-            const totale = qta * 7;
+            const totale = qta * 10;
             document.getElementById('prezzo-finale').innerText = totale;
             updatePrint();
         }
