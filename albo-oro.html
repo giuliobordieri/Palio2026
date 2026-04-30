@@ -236,43 +236,59 @@
     </div>
 
     <script>
-        // DATI ESTRATTI DALLA LOCANDINA
-        // Azzurri: 10 vittorie (99, 04, 05, 06, 08, 10, 11, 12, 13, 14, 17, 18) -> ricalcolo:
-        // Azzurri: 1999, 04, 05, 06, 08, 10, 11, 12, 13, 14, 17, 18 (Totale 12)
-        // Verdi: 1998, 00, 02, 03, 07, 16, 19, 22, 23 (Totale 9)
-        // Gialli: 1995, 96, 97, 01, 09, 24, 25 (Totale 7)
-        // Rossi: 2015 (Totale 1)
+	const ctx = document.getElementById('vittorieChart').getContext('2d');
 
-        const ctx = document.getElementById('vittorieChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['AZZURRI', 'VERDI', 'GIALLI', 'ROSSI'],
-                datasets: [{
-                    label: 'Numero di Palii vinti',
-                    data: [12, 9, 7, 1],
-                    backgroundColor: ['#4d94ff', '#4dff4d', '#ffff4d', '#ff4d4d'],
-                    borderColor: ['#fff', '#fff', '#fff', '#fff'],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: '#fff' },
-                        grid: { color: 'rgba(255,255,255,0.1)' }
-                    },
-                    x: {
-                        ticks: { color: '#fff', font: { weight: 'bold' } }
-                    }
-                }
-            }
-        });
+	new Chart(ctx, {
+	    type: 'bar',
+	    data: {
+		labels: ['AZZURRI', 'VERDI', 'GIALLI', 'ROSSI'],
+		datasets: [{
+		    label: 'Numero di Palii vinti',
+		    data: [12, 9, 7, 1], // Dati estratti dalla tua locandina
+		    backgroundColor: ['#4d94ff', '#4dff4d', '#ffff4d', '#ff4d4d'],
+		    borderColor: ['#fff', '#fff', '#fff', '#fff'],
+		    borderWidth: 2
+		}]
+	    },
+	    options: {
+		responsive: true,
+		plugins: {
+		    legend: { display: false },
+		    // Configurazione per mostrare i numeri sopra le barre
+		    tooltip: { enabled: true }
+		},
+		scales: {
+		    y: {
+		        beginAtZero: true,
+		        max: 14, // Lasciamo un po' di spazio sopra per i numeri
+		        ticks: { color: '#fff' },
+		        grid: { color: 'rgba(255,255,255,0.1)' }
+		    },
+		    x: {
+		        ticks: { color: '#fff', font: { weight: 'bold', size: 20 } }
+		    }
+		},
+		// Animazione per far apparire i numeri dopo il caricamento
+		animation: {
+		    onComplete: function() {
+		        const chartInstance = this;
+		        const ctx = chartInstance.ctx;
+		        ctx.font = Chart.helpers.fontString(Chart.defaults.font.size, 'bold', Chart.defaults.font.family);
+		        ctx.textAlign = 'center';
+		        ctx.textBaseline = 'bottom';
+		        ctx.fillStyle = '#fff'; // Colore dei numeri
+
+		        this.data.datasets.forEach(function(dataset, i) {
+		            const meta = chartInstance.getDatasetMeta(i);
+		            meta.data.forEach(function(bar, index) {
+		                const data = dataset.data[index];
+		                ctx.fillText(data, bar.x, bar.y - 5);
+		            });
+		        });
+		    }
+		}
+	    }
+	});
     </script>
 </body>
 </html>
