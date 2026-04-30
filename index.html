@@ -154,6 +154,98 @@
             h1, .subtitle { font-size: 2.5rem; }
             .countdown { font-size: 1.5rem; padding: 20px; }
         }
+        
+        /* Container Header relativo per posizionare i sigilli */
+	header {
+	    position: relative;
+	    overflow: hidden; /* Evita che i bagliori creino scroll orizzontale */
+	}
+
+	/* Il Sigillo: Grosso, d'oro e lucido */
+	.big-circle-btn {
+	    position: absolute;
+	    top: 50px;
+	    width: 120px; /* Molto più grande */
+	    height: 120px;
+	    background: radial-gradient(circle, #d4af37 0%, #8a6d3b 100%);
+	    border: 4px solid #fff;
+	    border-radius: 50%;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    text-decoration: none;
+	    text-align: center;
+	    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(212, 175, 55, 0.4);
+	    z-index: 999;
+	    transition: all 0.3s ease;
+	    cursor: pointer;
+	}
+
+	/* Effetto riflesso sopra il cerchio */
+	.big-circle-btn::after {
+	    content: '';
+	    position: absolute;
+	    top: 5%;
+	    left: 15%;
+	    width: 70%;
+	    height: 35%;
+	    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+	    border-radius: 50% 50% 20% 20%;
+	}
+
+	.big-circle-btn:hover {
+	    transform: translateY(-5px) scale(1.05);
+	    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.8);
+	    filter: brightness(1.2);
+	}
+
+	.seal-inner {
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    line-height: 1.1;
+	    z-index: 2; /* Sopra il riflesso */
+	}
+
+	.seal-icon {
+	    font-size: 2.5rem;
+	    margin-bottom: 5px;
+	    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+	}
+
+	.seal-text {
+	    font-family: 'Cinzel', serif;
+	    font-size: 0.8rem;
+	    font-weight: 900;
+	    color: #1a1a1a; /* Testo scuro sull'oro per leggibilità */
+	    text-transform: uppercase;
+	}
+
+	/* Posizioni desktop */
+	.seal-left { left: 50px; }
+	.seal-right { right: 50px; }
+
+	/* --- VERSIONE MOBILE (Proporzionata) --- */
+	@media (max-width: 768px) {
+	    .big-circle-btn {
+		width: 90px; /* Ridotto ma comunque "grosso" per il mobile */
+		height: 90px;
+		top: 20px;
+		border-width: 3px;
+	    }
+
+	    .seal-left { left: 10px; }
+	    .seal-right { right: 10px; }
+
+	    .seal-icon { font-size: 1.8rem; }
+	    .seal-text { font-size: 0.65rem; }
+
+	    /* Spingiamo il titolo più in basso per non coprirlo */
+	    h1 {
+		font-size: 2.2rem !important;
+		margin-top: 140px !important;
+	    }
+	}
     </style>
 </head>
 
@@ -170,6 +262,22 @@
 <body>
 
 <header>
+
+    <a href="albo-oro.html" class="big-circle-btn seal-left">
+        <div class="seal-inner">
+            <span class="seal-icon">🏆</span>
+            <span class="seal-text">ALBO<br>D'ORO</span>
+        </div>
+    </a>
+
+    <!-- Bottone SCORRI (Grosso a Destra) -->
+    <div class="big-circle-btn seal-right" onclick="window.scrollTo({top: window.innerHeight, behavior: 'smooth'})">
+        <div class="seal-inner">
+            <span class="seal-icon">↓</span>
+            <span class="seal-text">SCOPRI<br>LA FESTA</span>
+        </div>
+    </div>
+    
     <h1>PALIO DELLE CONTRADE 2026</h1>
     <div class="subtitle">30esima Edizione</div>
     <div class="countdown" id="timer">Caricamento...</div>
@@ -581,15 +689,6 @@
             </div>
         </a>
 
-        <a href="#" style="text-decoration: none; color: white; opacity: 0.6; cursor: not-allowed;">
-            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid #444; padding: 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <span style="font-size: 1.2rem; font-weight: bold; display: block;">📂 Foto Giornata 2</span>
-                    <small style="color: #aaa;">Presto disponibili</small>
-                </div>
-                <span style="color: #444; font-size: 1.5rem;">🔒</span>
-            </div>
-        </a>
     </div>
 </section>
 
