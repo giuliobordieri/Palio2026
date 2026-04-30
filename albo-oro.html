@@ -138,9 +138,14 @@
 
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
-            .history-section { grid-template-columns: 1fr; }
+            .history-section {
+		grid-template-columns: 1fr !important; /* Forza una sola colonna */
+		gap: 0 !important; /* Elimina lo spazio tra le due ex-colonne */
+		padding: 20px !important; /* Riduce il padding per guadagnare spazio */
+    	    }
             .back-btn { padding: 8px 15px; font-size: 0.8rem; }
         }
+        
     </style>
 </head>
 <body>
@@ -223,7 +228,7 @@
         <!-- DOWNLOAD -->
         <div class="download-section">
             <a href="Albo_Palio2026.jpeg" download class="btn-download">
-                📥 SCARICA ALBO D'ORO (PDF)
+                📥 SCARICA ALBO D'ORO
             </a>
             <p style="font-size: 0.8rem; color: #777; margin-top: 15px;">Versione aggiornata a Giugno 2025</p>
         </div>
