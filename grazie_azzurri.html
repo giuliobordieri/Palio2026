@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disponibilità Giocatori - Contrada degli Azzurri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #a2d2ff; /* Azzurro Pastello */
+            --dark-blue: #4a90e2;
+            --deep-navy: #2c3e50;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            /* Sfondo azzurro pastello sfumato */
+            background: linear-gradient(135deg, #eef6ff 0%, var(--primary-blue) 100%);
+            color: var(--deep-navy);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 30px;
+            border: 3px solid var(--dark-blue);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            margin: 20px;
+        }
+
+        /* Spazio per il Logo Tondo */
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            background: var(--white);
+            border: 3px solid var(--dark-blue);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .logo-placeholder {
+            max-width: 100%;
+            height: auto;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--dark-blue);
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .highlight-box {
+            background: rgba(162, 210, 255, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid var(--dark-blue);
+            text-align: left;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            font-size: 0.95rem;
+            color: #555;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .actions {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--dark-blue);
+            color: var(--white);
+            text-decoration: none;
+            padding: 15px 35px;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            border: none;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--deep-navy);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .footer-note {
+            font-style: italic;
+            color: var(--dark-blue);
+            margin-top: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Inserisci qui il tuo logo PNG -->
+        <div class="logo-container">
+            <img src="logo_azzurri.png" alt="Logo Azzurri" class="logo-placeholder">
+        </div>
+
+        <h1>CONTRADA DEGLI AZZURRI</h1>
+        
+        <div class="highlight-box">
+            <p><strong>Grazie per averci dato la tua disponibilità!</strong></p>
+            <p>La tua richiesta per partecipare ai giochi è stata registrata con successo. Ti faremo sapere al più presto se ci sono posti disponibili.</p>
+            <p>Faremo di tutto per soddisfare ogni richiesta e permettere a tutti di scendere in campo a divertirsi!</p>
+        </div>
+
+        <p class="contact-info">
+            Per ulteriori domande o informazioni non esitare a contattarci ai numeri di telefono che trovi nella pagina principale del sito ufficiale del Palio 2026.
+        </p>
+
+        <div class="actions">
+            <a href="index.html" class="btn">CLICCA PER VISITARE IL SITO</a>
+        </div>
+        
+        <p class="footer-note"> 🔵🃏 Ci vediamo in oratorio! 🃏🔵</p>
+    </div>
+
+</body>
+</html>
