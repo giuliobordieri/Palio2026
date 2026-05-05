@@ -246,6 +246,36 @@
 		margin-top: 140px !important;
 	    }
 	}
+	
+	
+  .btn-tally {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: linear-gradient(135deg, #4d94ff, #0055ff); 
+    color: white !important; 
+    text-decoration: none; 
+    padding: 10px 15px; 
+    border-radius: 50px; 
+    font-weight: bold; 
+    font-size: 0.85rem; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+    transition: 0.3s;
+  }
+
+  /* Versione Small per Mobile */
+  @media (max-width: 480px) {
+    .btn-tally {
+      padding: 5px 10px;    /* Riduce lo spazio interno */
+      font-size: 0.65rem;   /* Testo molto piccolo */
+      max-width: fit-content; /* Evita che occupi tutta la larghezza */
+      margin: 0 auto;       /* Lo centra se necessario */
+    }
+    .btn-tally span {
+      font-size: 0.8rem !important; /* Rimpicciolisce l'emoji */
+      margin-right: 4px !important;
+    }
+  }
     </style>
 </head>
 
