@@ -246,20 +246,24 @@
 		margin-top: 140px !important;
 	    }
 	    
-	    .btn-tally {
-	      padding: 8px;          /* Lo rende quasi circolare */
-	      border-radius: 50%;    /* Diventa un cerchio perfetto se l'icona è centrata */
-	      width: 35px;           /* Larghezza fissa per il cerchio */
-	      height: 35px;          /* Altezza fissa per il cerchio */
+	.btn-tally {
+		display: inline-flex;  /* Fondamentale per centrare l'emoji nel cerchio */
+		align-items: center;
+		justify-content: center;
+		padding: 0;            /* Reset del padding per non sfasare il cerchio */
+		border-radius: 50%;
+		width: 38px;           /* Leggermente più grande per essere più facile da tappare */
+		height: 38px;
+		margin: 0 auto;        /* Lo centra orizzontalmente se il contenitore è text-align: center */
 	    }
-	    
+
 	    .btn-text {
-	      display: none;         /* NASCONDE IL TESTO */
+		display: none;         /* Nasconde il testo */
 	    }
-	    
+
 	    .btn-tally span:first-child {
-	      margin-right: 0;       /* Toglie il margine dell'emoji visto che il testo non c'è più */
-	      font-size: 1.2rem;     /* Ingrandisce un po' l'emoji per renderla cliccabile */
+		margin-right: 0;
+		font-size: 1.3rem;     /* Emoji leggermente più grande per mobile */
 	    }
 	}
 	
@@ -577,11 +581,11 @@
 	<div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border-left: 4px solid #4d94ff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative;">
 	    <strong style="color: #4d94ff; font-size: 1.1rem;">🔵 Contrada AZZURRI</strong><br>
 	    
-	    <span style="font-size: 0.9rem; color: #eee;">Vito Rania</span><br>
-	    <a href="tel:3383301296" style="color: #d4af37; text-decoration: none; font-weight: bold; display: block; margin-top: 2px;">📞 338 3301296</a>            
+	    <span style="font-size: 0.9rem; color: #eee;">Giulio Bordieri</span><br>
+	    <a href="tel:3383301296" style="color: #d4af37; text-decoration: none; font-weight: bold; display: block; margin-top: 2px;">📞 340 7578152</a>            
 	    
-	    <span style="font-size: 0.9rem; color: #eee; display: block; margin-top: 8px;">Giulio Bordieri</span>
-	    <a href="tel:3407578152" style="color: #d4af37; text-decoration: none; font-weight: bold; display: block; margin-top: 2px;">📞 340 7578152</a>
+	    <span style="font-size: 0.9rem; color: #eee; display: block; margin-top: 8px;">Vito Rania</span>
+	    <a href="tel:3407578152" style="color: #d4af37; text-decoration: none; font-weight: bold; display: block; margin-top: 2px;">📞 338 3301296</a>
 
 	    <!-- Pulsante per il Form -->
 	    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
